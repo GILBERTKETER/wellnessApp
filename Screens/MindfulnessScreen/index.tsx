@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     meditationContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     meditationCard: {
         width: '30%',
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         fontSize: 10,
     },
     activityCard: {
-        marginHorizontal: 20,
+        marginHorizontal: 10,
         marginBottom: 15,
         borderRadius: 10,
     },

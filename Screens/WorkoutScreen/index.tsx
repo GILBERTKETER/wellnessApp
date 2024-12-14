@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     categoryCard: {
         width: '48%',
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     workoutCard: {
-        marginHorizontal: 20,
+        marginHorizontal: 10,
         marginBottom: 15,
         borderRadius: 10,
     },

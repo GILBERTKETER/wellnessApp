@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     statsContainer: {
-        paddingHorizontal: 10,
+        paddingVertical: 10,
     },
     statCard: {
         marginHorizontal: 10,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     mealPlanCard: {
-        marginHorizontal: 20,
+        marginHorizontal: 10,
         marginBottom: 15,
         borderRadius: 10,
     },

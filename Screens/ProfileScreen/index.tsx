@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     statsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     statCard: {
         width: '30%',
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
         color: '#6200ee',
     },
     settingsContainer: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     settingsCard: {
         borderRadius: 10,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     profileOptionItem: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     logoutContainer: {
         paddingHorizontal: 20,
