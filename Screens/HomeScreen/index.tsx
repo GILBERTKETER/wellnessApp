@@ -46,7 +46,7 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
                 <Text style={styles.sectionTitle}>Daily Goals</Text>
                 <ScrollView
                     horizontal
-                    showsHorizontalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={true}
                     style={styles.goalsContainer}
                 >
                     {dailyGoals.map((goal) => (
