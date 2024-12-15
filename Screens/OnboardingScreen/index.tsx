@@ -20,7 +20,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
             onSkip={handleDone}
             pages={[
                 {
-                    backgroundColor: '#6200EE',
+                    backgroundColor: '#FFFFFF',
                     image: (
                         <View style={styles.lottieContainer}>
                             <LottieView

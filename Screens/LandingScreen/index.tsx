@@ -19,11 +19,16 @@ type LandingScreenProps = StackScreenProps<RootStackParamList, 'Landing'>;
 
 const LandingScreen: React.FC<LandingScreenProps> = ({ navigation }) => {
     return (
+
         <View style={styles.container}>
+        {/* {to set custome color for status bar} */}
+<StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = 
+"#FFFFFF" translucent = {true}/> 
+
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>FitPro</Text>
+                <Text style={styles.title}>Wellness App</Text>
                 <Text style={styles.subtitle}>
-                    Your Personalized Fitness Companion
+                Your Wellness, Your Way
                 </Text>
                 <Button
                     mode="contained"
@@ -42,10 +47,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#6200EE', // A solid background color
+        backgroundColor: '#FFFFFF', // A solid background color
     },
     contentContainer: {
-        width: width * 0.85,
+        width: "85%",
         padding: 30,
         borderRadius: 20,
         backgroundColor: 'rgba(255,255,255,0.2)',
@@ -54,17 +59,23 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 48,
         fontWeight: 'bold',
-        color: 'white',
+        color: '#888',
         marginBottom: 10,
     },
     subtitle: {
         fontSize: 18,
-        color: 'white',
+        color: '#1D2231', //dark color
         textAlign: 'center',
         marginBottom: 30,
     },
     loginButton: {
+        backgroundColor: '#1D2231', //dark color
+        paddingVertical: 7,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        marginTop: 10,
         width: '100%',
+        alignItems: 'center',
     },
 });
 
