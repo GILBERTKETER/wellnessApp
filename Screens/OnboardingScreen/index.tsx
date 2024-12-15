@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, StatusBar } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
 import LottieView from 'lottie-react-native';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -23,6 +23,9 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
                     backgroundColor: '#FFFFFF',
                     image: (
                         <View style={styles.lottieContainer}>
+                             {/* {to set custome color for status bar} */}
+                            <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = 
+                            "#FFFFFF" translucent = {true}/> 
                             <LottieView
                                 source={require('../../assets/fitness-tracking.json')}
                                 autoPlay
@@ -38,6 +41,9 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
                     backgroundColor: '#03DAC6',
                     image: (
                         <View style={styles.lottieContainer}>
+                             {/* {to set custome color for status bar} */}
+                             <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = 
+                            "#03DAC6" translucent = {true}/>
                             <LottieView
                                 source={require('../../assets/workout-analytics.json')}
                                 autoPlay
@@ -53,6 +59,9 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
                     backgroundColor: '#018786',
                     image: (
                         <View style={styles.lottieContainer}>
+                             {/* {to set custome color for status bar} */}
+                             <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = 
+                            "#018786" translucent = {true}/>
                             <LottieView
                                 source={require('../../assets/community-fitness.json')}
                                 autoPlay
