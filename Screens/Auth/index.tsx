@@ -5,7 +5,6 @@ import {
     Dimensions,
     TouchableOpacity,
     Linking,
-    CheckBox
 } from 'react-native';
 import {
     Text,
@@ -27,9 +26,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
+
     const openSignupPage = () => {
         navigation.navigate('Signup'); // Navigate to the Signup screen
-      };
+    };
 
     const handleLogin = () => {
         // Implement login logic
@@ -37,10 +37,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     };
 
 
-    const openResetPasswordPage = () =>{
+    const openResetPasswordPage = () => {
         //navigate to reset password page
     }
-   
+
 
     return (
         <View style={styles.container}>
@@ -59,9 +59,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                         style={styles.input}
                         placeholder="Email"
                         keyboardType="email-address"
+                        value={email}
+                        onChangeText={setEmail}
                     />
                 </View>
-
 
 
                 {/* Password Input */}
@@ -70,7 +71,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="Password"
-                        secureTextEntry
+                        secureTextEntry={secureTextEntry}
+                        value={password}
+                        onChangeText={setPassword}
                     />
                     <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
                         <Icon
@@ -82,8 +85,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 </View>
 
 
-                 {/* Sign Up Link */}
-                 <Text style={styles.signupText}>
+                {/* Sign Up Link */}
+                <Text style={styles.signupText}>
                     forgot password? <Text style={styles.signupLink} onPress={openResetPasswordPage}>Reset password</Text>
                 </Text>
 

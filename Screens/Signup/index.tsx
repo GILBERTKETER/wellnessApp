@@ -180,15 +180,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     card: {
-        width: '100%',
-        height: '100%',
-        padding: 20,
-        borderRadius: 10,
-        backgroundColor: '#fff',
-        elevation: 5,
-        shadowColor: '#000',
+        width: '100%', // Full width of the container
+        height: '100%', // Full height of the container
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff', // Optional: Add a background color for visibility
+        borderRadius: 10, // Optional: Add rounded corners
+        shadowColor: '#000', // Optional: Add a shadow
         shadowOpacity: 0.1,
         shadowRadius: 5,
+        elevation: 3, // For Android shadow
+        padding: 20,
     },
     title: {
         fontSize: 32,
