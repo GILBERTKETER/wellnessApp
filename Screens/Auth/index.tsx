@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import {
     View,
     StyleSheet,
-    Dimensions
+    Dimensions,
+     TouchableOpacity, 
+      Linking, 
+      CheckBox
 } from 'react-native';
 import {
     Text,
@@ -12,6 +15,7 @@ import {
 } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { RootStackParamList } from '../../App';
 
 const { width, height } = Dimensions.get('window');
@@ -30,98 +34,75 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+
             <Surface style={styles.card}>
-                <Text style={styles.title}>Welcome Back</Text>
+
+                <Text style={styles.title}>Wellness App</Text>
                 <Text style={styles.subtitle}>
-                    Sign in to continue to FitPro
+                    Sign in
                 </Text>
+                
+                 {/* Email Input */}
+      <View style={styles.inputContainer}>
+        <Icon name="email" size={20} color="#888" />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+        />
+      </View>
 
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        label="Email"
-                        value={email}
-                        onChangeText={setEmail}
-                        style={styles.input}
-                        left={
-                            <TextInput.Icon
-                                name={() => (
-                                    <Icon
-                                        name="email-outline"
-                                        size={24}
-                                        color="#6200EE"
-                                    />
-                                )}
-                            />
-                        }
-                        theme={{
-                            colors: {
-                                primary: '#6200EE',
-                                background: 'transparent'
-                            }
-                        }}
-                    />
 
-                    <TextInput
-                        label="Password"
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry={secureTextEntry}
-                        style={styles.input}
-                        left={
-                            <TextInput.Icon
-                                name={() => (
-                                    <Icon
-                                        name="lock-outline"
-                                        size={24}
-                                        color="#6200EE"
-                                    />
-                                )}
-                            />
-                        }
-                        right={
-                            <TextInput.Icon
-                                name={() => (
-                                    <Icon
-                                        name="eye-outline"
-                                        size={24}
-                                        color="#6200EE"
-                                        onPress={() => setSecureTextEntry(!secureTextEntry)}
-                                    />
-                                )}
-                            />
-                        }
-                        theme={{
-                            colors: {
-                                primary: '#6200EE',
-                                background: 'transparent'
-                            }
-                        }}
-                    />
 
-                    <Text style={styles.forgotPassword}>
-                        Forgot Password?
-                    </Text>
-                </View>
+        {/* Password Input */}
+        <View style={styles.inputContainer}>
+        <Icon name="lock" size={20} color="#888" />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+        />
+        <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
+        <Icon
+          name={secureTextEntry ? 'eye-off-outline' : 'eye-outline'}
+          size={20}
+          color="#6200EE"
+        />
+      </TouchableOpacity>
+      </View>
 
-                <Button
-                    mode="contained"
-                    style={styles.loginButton}
-                    onPress={handleLogin}
-                >
-                    Login
-                </Button>
+      {/* Login Button */}
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
 
-                <View style={styles.signupContainer}>
-                    <Text style={styles.signupText}>
-                        Don't have an account?
-                    </Text>
-                    <Button
-                        mode="text"
-                        onPress={() => {/* Navigate to Signup screen */ }}
-                    >
-                        Sign Up
-                    </Button>
-                </View>
+  {/* Divider */}
+  <Text style={styles.divider}>Or sign in with</Text>
+
+              
+            {/* Social Login Buttons */}
+      <View style={styles.socialContainer}>
+        <TouchableOpacity style={styles.socialButton}>
+          <Icon name="apple" size={24} color="#000" />
+          <Text style={styles.socialText}>Apple</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <Icon name="google" size={24} color="#EA4335" />
+          <Text style={styles.socialText}>Google</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <Icon name="facebook" size={24} color="#3b5998" />
+          <Text style={styles.socialText}>Facebook</Text>
+        </TouchableOpacity>
+      </View>
+
+
+
+        {/* Sign Up Link */}
+        <Text style={styles.signupText}>
+        Don't have an account? <Text style={styles.signupLink}>Sign Up</Text>
+      </Text>
+
             </Surface>
         </View>
     );
@@ -132,14 +113,20 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#6200EE', // Replaced LinearGradient with solid background
+     // Replaced LinearGradient with solid background
     },
     card: {
-        width: width * 0.85,
-        padding: 30,
-        borderRadius: 20,
-        elevation: 10,
-        backgroundColor: 'white',
+        width: '100%', // Full width of the container
+        height: '100%', // Full height of the container
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff', // Optional: Add a background color for visibility
+        borderRadius: 10, // Optional: Add rounded corners
+        shadowColor: '#000', // Optional: Add a shadow
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3, // For Android shadow
+       padding: 20,
     },
     title: {
         fontSize: 32,
@@ -154,31 +141,71 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     inputContainer: {
-        marginBottom: 20,
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      marginBottom: 15,
+      width: '100%',
+      backgroundColor: '#fff',
     },
     input: {
-        marginBottom: 15,
-        backgroundColor: 'transparent',
+      flex: 1,
+      paddingHorizontal: 10,
+      height: 40,
     },
-    forgotPassword: {
-        textAlign: 'right',
-        color: '#6200EE',
-        marginTop: -10,
-        marginBottom: 15,
+    button: {
+      backgroundColor: '#1E90FF',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 8,
+      marginTop: 10,
+      width: '100%',
+      alignItems: 'center',
     },
-    loginButton: {
-        marginTop: 10,
-        padding: 5,
+    buttonText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: 16,
     },
-    signupContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-    },
-    signupText: {
-        color: '#666',
+    divider: {
+      marginVertical: 15,
+      color: '#888',
     }
+    ,socialContainer: {
+        flexDirection: 'row',
+  justifyContent: 'center', // Center items in each row
+  flexWrap: 'wrap', // Enable wrapping
+  width: '100%',
+  marginVertical: 10,
+  },
+  socialButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    backgroundColor: '#fff',
+    margin: 5,
+  },
+  socialText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: '#333',
+  },
+  signupText: {
+    marginTop: 15,
+    color: '#555',
+  },
+  signupLink: {
+    color: '#1E90FF',
+    fontWeight: 'bold',
+  },
+
 });
 
 export default LoginScreen;
