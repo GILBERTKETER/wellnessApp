@@ -35,6 +35,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         // Implement login logic
         navigation.navigate('MainApp');
     };
+
+
+    const openResetPasswordPage = () =>{
+        //navigate to reset password page
+    }
    
 
     return (
@@ -76,6 +81,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
+
+                 {/* Sign Up Link */}
+                 <Text style={styles.signupText}>
+                    forgot password? <Text style={styles.signupLink} onPress={openResetPasswordPage}>Reset password</Text>
+                </Text>
+
                 {/* Login Button */}
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     <Text style={styles.buttonText}>Login</Text>
@@ -105,7 +116,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
                 {/* Sign Up Link */}
                 <Text style={styles.signupText}>
-                    Don't have an account? <Text style={styles.signupLink}>Sign Up</Text>
+                    Don't have an account? <Text style={styles.signupLink} onPress={openSignupPage}>Sign Up</Text>
                 </Text>
 
             </Surface>

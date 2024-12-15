@@ -4,12 +4,14 @@ import {
     StyleSheet,
     Dimensions,
     TouchableOpacity,
+    Linking,
 } from 'react-native';
 import {
     Text,
     TextInput,
     Button,
-    Surface
+    Surface,
+    Checkbox
 } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -27,19 +29,39 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
     const handleSignup = () => {
+        if (!isChecked) {
+            alert('You must accept the Terms and Conditions to proceed.');
+            return;
+        }
         if (password !== confirmPassword) {
-            // Show an alert or message about password mismatch
             alert('Passwords do not match');
             return;
         }
-        // Implement your signup logic here (e.g., API request)
-        navigation.navigate('MainApp'); // Navigate to the main app after signup
+        // Signup logic here
+        navigation.navigate('MainApp');
     };
+    
+
+
+    const openLoginPage = () => {
+        navigation.navigate('Login'); // Navigate to the Login screen
+      };
+
+
+       // Function to handle opening the Terms and Conditions link
+  const openTermsAndConditions = () => {
+    Linking.openURL('https://example.com/terms'); // Replace with your Terms URL
+  };
+
+
+    const [isChecked, setIsChecked] = useState(false);
+
+
 
     return (
         <View style={styles.container}>
             <Surface style={styles.card}>
-                <Text style={styles.title}>Create an Account</Text>
+                <Text style={styles.title}>Wellness App</Text>
                 <Text style={styles.subtitle}>Sign up to get started</Text>
 
                 {/* Name Input */}
@@ -103,6 +125,21 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
+
+  {/* Terms and Conditions */}
+  <View style={styles.termsContainer}>
+        <Checkbox status={isChecked ? 'checked' : 'unchecked'}
+        onPress={() => setIsChecked(!isChecked)}/>
+        <Text style={styles.termsText}>
+          I accept the{' '}
+          <Text style={styles.link} onPress={openTermsAndConditions}>
+            Terms and Conditions
+          </Text>
+        </Text>
+      </View>
+
+
+
                 {/* Sign Up Button */}
                 <TouchableOpacity style={styles.button} onPress={handleSignup}>
                     <Text style={styles.buttonText}>Sign Up</Text>
@@ -129,7 +166,7 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
 
                 {/* Login Link */}
                 <Text style={styles.signupText}>
-                    Already have an account? <Text style={styles.signupLink} onPress={() => navigation.navigate('Login')}>Log In</Text>
+                    Already have an account? <Text style={styles.signupLink} onPress={openLoginPage}>Log In</Text>
                 </Text>
             </Surface>
         </View>
@@ -143,7 +180,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     card: {
-        width: '90%',
+        width: '100%',
+        height: '100%',
         padding: 20,
         borderRadius: 10,
         backgroundColor: '#fff',
@@ -180,6 +218,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         height: 40,
     },
+    termsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+      },
+      termsText: {
+        marginLeft: 10,
+        color: '#555',
+      },
+      link: {
+        color: '#1E90FF',
+        textDecorationLine: 'underline',
+      },
     button: {
         backgroundColor: '#1D2231',
         paddingVertical: 10,
