@@ -17,12 +17,14 @@ import ProfileScreen from './Screens/ProfileScreen';
 import LandingScreen from './Screens/LandingScreen';
 import OnboardingScreen from './Screens/OnboardingScreen';
 import LoginScreen from './Screens/Auth';
+import SignupScreen from './Screens/Signup';
 
 // Define the type for our Stack Navigator
 export type RootStackParamList = {
   Landing: undefined;
   Onboarding: undefined;
   Login: undefined;
+  Signup: undefined;
   MainApp: undefined;
 };
 
@@ -105,6 +107,7 @@ const App: React.FC = () => {
             <Stack.Screen name="Landing" component={LandingScreen} />
             <Stack.Screen name="Onboarding" component={OnboardingScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Signup" component={SignupScreen} />
             <Stack.Screen
               name="MainApp"
               component={BottomTabNavigator}

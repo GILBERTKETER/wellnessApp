@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import {
     View,
     StyleSheet,
     Dimensions,
     TouchableOpacity,
-    Linking,
-    CheckBox
 } from 'react-native';
 import {
     Text,
@@ -15,37 +13,45 @@ import {
 } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { RootStackParamList } from '../../App';
 
 const { width, height } = Dimensions.get('window');
 
-type LoginScreenProps = StackScreenProps<RootStackParamList, 'Login'>;
+type SignupScreenProps = StackScreenProps<RootStackParamList, 'Signup'>;
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
+const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-    const openSignupPage = () => {
-        navigation.navigate('Signup'); // Navigate to the Signup screen
-      };
-
-    const handleLogin = () => {
-        // Implement login logic
-        navigation.navigate('MainApp');
+    const handleSignup = () => {
+        if (password !== confirmPassword) {
+            // Show an alert or message about password mismatch
+            alert('Passwords do not match');
+            return;
+        }
+        // Implement your signup logic here (e.g., API request)
+        navigation.navigate('MainApp'); // Navigate to the main app after signup
     };
-   
 
     return (
         <View style={styles.container}>
-
             <Surface style={styles.card}>
+                <Text style={styles.title}>Create an Account</Text>
+                <Text style={styles.subtitle}>Sign up to get started</Text>
 
-                <Text style={styles.title}>Wellness App</Text>
-                <Text style={styles.subtitle}>
-                    Sign in
-                </Text>
+                {/* Name Input */}
+                <View style={styles.inputContainer}>
+                    <Icon name="account" size={20} color="#888" />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Full Name"
+                        value={name}
+                        onChangeText={setName}
+                    />
+                </View>
 
                 {/* Email Input */}
                 <View style={styles.inputContainer}>
@@ -54,10 +60,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                         style={styles.input}
                         placeholder="Email"
                         keyboardType="email-address"
+                        value={email}
+                        onChangeText={setEmail}
                     />
                 </View>
-
-
 
                 {/* Password Input */}
                 <View style={styles.inputContainer}>
@@ -65,7 +71,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="Password"
-                        secureTextEntry
+                        secureTextEntry={secureTextEntry}
+                        value={password}
+                        onChangeText={setPassword}
                     />
                     <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
                         <Icon
@@ -76,14 +84,32 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-                {/* Login Button */}
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
+                {/* Confirm Password Input */}
+                <View style={styles.inputContainer}>
+                    <Icon name="lock" size={20} color="#888" />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Confirm Password"
+                        secureTextEntry={secureTextEntry}
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                    />
+                    <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
+                        <Icon
+                            name={secureTextEntry ? 'eye-off-outline' : 'eye-outline'}
+                            size={20}
+                            color="#6200EE"
+                        />
+                    </TouchableOpacity>
+                </View>
+
+                {/* Sign Up Button */}
+                <TouchableOpacity style={styles.button} onPress={handleSignup}>
+                    <Text style={styles.buttonText}>Sign Up</Text>
                 </TouchableOpacity>
 
                 {/* Divider */}
-                <Text style={styles.divider}>Or sign in with</Text>
-
+                <Text style={styles.divider}>Or sign up with</Text>
 
                 {/* Social Login Buttons */}
                 <View style={styles.socialContainer}>
@@ -101,13 +127,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-
-
-                {/* Sign Up Link */}
+                {/* Login Link */}
                 <Text style={styles.signupText}>
-                    Don't have an account? <Text style={styles.signupLink}>Sign Up</Text>
+                    Already have an account? <Text style={styles.signupLink} onPress={() => navigation.navigate('Login')}>Log In</Text>
                 </Text>
-
             </Surface>
         </View>
     );
@@ -118,25 +141,21 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        // Replaced LinearGradient with solid background
     },
     card: {
-        width: '100%', // Full width of the container
-        height: '100%', // Full height of the container
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff', // Optional: Add a background color for visibility
-        borderRadius: 10, // Optional: Add rounded corners
-        shadowColor: '#000', // Optional: Add a shadow
+        width: '90%',
+        padding: 20,
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        elevation: 5,
+        shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 5,
-        elevation: 3, // For Android shadow
-        padding: 20,
     },
     title: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#1D2231', //dark color
+        color: '#1D2231',
         textAlign: 'center',
     },
     subtitle: {
@@ -162,7 +181,7 @@ const styles = StyleSheet.create({
         height: 40,
     },
     button: {
-        backgroundColor: '#1D2231', //dark color
+        backgroundColor: '#1D2231',
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 8,
@@ -178,11 +197,11 @@ const styles = StyleSheet.create({
     divider: {
         marginVertical: 15,
         color: '#888',
-    }
-    , socialContainer: {
+    },
+    socialContainer: {
         flexDirection: 'row',
-        justifyContent: 'center', // Center items in each row
-        flexWrap: 'wrap', // Enable wrapping
+        justifyContent: 'center',
+        flexWrap: 'wrap',
         width: '100%',
         marginVertical: 10,
     },
@@ -210,7 +229,6 @@ const styles = StyleSheet.create({
         color: '#1E90FF',
         fontWeight: 'bold',
     },
-
 });
 
-export default LoginScreen;
+export default SignupScreen;
