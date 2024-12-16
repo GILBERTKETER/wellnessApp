@@ -17,7 +17,7 @@ const DailyQuote = () => {
     //the images and quotes will be dynamically generated either by AI or the system admin
     <View style={styles.container}>
       <ImageBackground
-        source={require('../../assets/images/innocence.jpg')}
+        source={require('../../assets/images/tougths.jpg')}
         style={styles.background}
         imageStyle={{ borderRadius: 12 }}
       >
@@ -25,7 +25,7 @@ const DailyQuote = () => {
         <View style={styles.overlay}>
           <Animated.View style={{ opacity: textOpacity }}>
             <Text style={styles.caption}>Daily Quotes</Text>
-            <Text style={styles.quote}>“Your Health, Your Asset”</Text>
+            <Text style={styles.quote}>“You're Stuck because you are trying to get there fast, small steps matters”</Text>
           </Animated.View>
         </View>
       </ImageBackground>
