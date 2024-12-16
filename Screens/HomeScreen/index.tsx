@@ -22,21 +22,23 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LineChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootTabParamList } from '../../App';
+import DailyQuote from './dailyQuotes';
 
 type HomeScreenProps = NativeStackScreenProps<RootTabParamList, 'Home'>;
 
 const HomeScreen: React.FC<HomeScreenProps> = () => {
     const [selectedPeriod, setSelectedPeriod] = useState('Week');
 
-    const dailyGoals = [
-        { id: '1', title: 'Steps', progress: 6540, goal: 10000, icon: 'walk' },
-        { id: '2', title: 'Water', progress: 1200, goal: 2000, icon: 'cup-water' },
-        { id: '3', title: 'Meditation', progress: 15, goal: 30, icon: 'meditation' }
-    ];
+ // Define the dailyGoals array with colors for each goal
+const dailyGoals = [
+    { id: '1', title: 'Today\'s Steps', progress: 6540, goal: 10000, icon: 'walk', color: '#1D2231' }, // dark color
+    { id: '2', title: 'Water Intake', progress: 1200, goal: 2000, icon: 'cup-water', color: '#03dac6' }, // Teal
+    { id: '3', title: 'Meditation Schedule', progress: 15, goal: 30, icon: 'meditation', color: '#ff5722' } // Orange
+];
 
     const quickActions = [
-        { id: '1', icon: 'dumbbell', title: 'Workout', color: '#6200ee' },
-        { id: '2', icon: 'food-apple', title: 'Nutrition', color: '#03dac6' },
+        { id: '1', icon: 'dumbbell', title: 'Workout', color: '#DC143C' },
+        { id: '2', icon: 'food-apple', title: 'Nutrition', color: '#04af5f' },
         { id: '3', icon: 'heart-pulse', title: 'Health', color: '#018786' }
     ];
 
@@ -46,7 +48,7 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
         datasets: [
             {
                 data: [5000, 6500, 4500, 7000, 6000, 8000, 5500].map(value => parseInt(value.toFixed(0), 10)),
-                color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+                color: () => `#1D223120`,
                 strokeWidth: 2
             }
         ]
@@ -82,6 +84,9 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
                 />
             </View>
 
+             {/* Daily Quote Section */}
+      <DailyQuote />
+
                 {/* Daily Goals */}
                 <Text style={styles.sectionTitle}>Daily Goals</Text>
                 <ScrollView
@@ -92,14 +97,14 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
                     {dailyGoals.map((goal) => (
                         <Surface key={goal.id} style={styles.goalCard}>
                             <View style={styles.goalContent}>
-                                <Icon name={goal.icon} size={30} color="#6200ee" />
+                                <Icon name={goal.icon} size={30} color={goal.color}/>
                                 <Title style={styles.goalTitle}>{goal.title}</Title>
                                 <Paragraph style={styles.goalProgress}>
                                     {goal.progress} / {goal.goal}
                                 </Paragraph>
                                 <ProgressBar
                                     progress={calculateProgress(goal.progress, goal.goal)}
-                                    color="#6200ee"
+                                    color="#1D2231" //darrk color
                                     style={styles.progressBar}
                                 />
                             </View>
@@ -108,7 +113,7 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
                 </ScrollView>
 
                 {/* Activity Tracker */}
-                <Text style={styles.sectionTitle}>Activity Tracker</Text>
+                <Text style={styles.sectionTitle}>Step Statistics</Text>
                 <View style={styles.chartContainer}>
                     <View style={styles.periodSelector}>
                         {['Week', 'Month', 'Year'].map((period) => (
@@ -133,10 +138,10 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
                             backgroundGradientFrom: '#fff',
                             backgroundGradientTo: '#fff',
                             decimalPlaces: 0,
-                            color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+                            color: (opacity = 1) => `rgba(29, 34, 49, ${opacity})`,
                             labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                             style: { borderRadius: 16 },
-                            propsForDots: { r: '6', strokeWidth: '2', stroke: '#6200ee' }
+                            propsForDots: { r: '3', strokeWidth: '2', stroke: '#1D223120' }
                         }}
                         bezier
                         style={styles.chart}
@@ -215,7 +220,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     avatar: {
-        backgroundColor: '#6200ee',
+        backgroundColor: '#018786',
     },
     sectionTitle: {
         fontSize: 18,
@@ -290,10 +295,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     selectedPeriod: {
-        backgroundColor: '#6200ee',
+        backgroundColor: '#1D2231',//dark color
     },
     periodButtonText: {
-        color: '#6200ee',
+        color: '#018786',
     },
     chart: {
         marginVertical: 8,
