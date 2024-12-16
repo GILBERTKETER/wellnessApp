@@ -55,9 +55,9 @@ const dailyGoals = [
     };
 
     const upcomingActivities = [
-        { id: '1', title: 'Morning Yoga', time: '07:00 AM', duration: '30 min', icon: 'yoga' },
-        { id: '2', title: 'HIIT Workout', time: '06:00 PM', duration: '45 min', icon: 'fire' },
-        { id: '3', title: 'Meditation', time: '09:00 PM', duration: '15 min', icon: 'meditation' }
+        { id: '1', title: 'Morning Yoga', time: '07:00 AM', duration: '30 min', icon: 'yoga' , color: '#1D2231'},
+        { id: '2', title: 'HIIT Workout', time: '06:00 PM', duration: '45 min', icon: 'fire' , color: '#ff5722'},
+        { id: '3', title: 'Meditation', time: '09:00 PM', duration: '15 min', icon: 'meditation' , color: '#03A9F4'}
     ];
 
     const calculateProgress = (progress: number, goal: number) => {
@@ -179,7 +179,7 @@ const dailyGoals = [
                                 <Icon
                                     name={activity.icon}
                                     size={30}
-                                    color="#6200ee"
+                                    color={activity.color}
                                     style={styles.activityIcon}
                                 />
                                 <View style={styles.activityDetails}>
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     startButton: {
-        backgroundColor: '#6200ee',
+        backgroundColor: '#1D2231',
         paddingHorizontal: 15,
         paddingVertical: 8,
         borderRadius: 20,
