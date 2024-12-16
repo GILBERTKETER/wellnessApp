@@ -174,6 +174,8 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 10,
         height: 40,
+        backgroundColor: '#fff',
+
     },
     button: {
         backgroundColor: '#1D2231', //dark color
