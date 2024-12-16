@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -40,18 +40,18 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
         // Signup logic here
         navigation.navigate('MainApp');
     };
-    
+
 
 
     const openLoginPage = () => {
         navigation.navigate('Login'); // Navigate to the Login screen
-      };
+    };
 
 
-       // Function to handle opening the Terms and Conditions link
-  const openTermsAndConditions = () => {
-    Linking.openURL('https://example.com/terms'); // Replace with your Terms URL
-  };
+    // Function to handle opening the Terms and Conditions link
+    const openTermsAndConditions = () => {
+        Linking.openURL('https://example.com/terms'); // Replace with your Terms URL
+    };
 
 
     const [isChecked, setIsChecked] = useState(false);
@@ -126,17 +126,17 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
                 </View>
 
 
-  {/* Terms and Conditions */}
-  <View style={styles.termsContainer}>
-        <Checkbox status={isChecked ? 'checked' : 'unchecked'}
-        onPress={() => setIsChecked(!isChecked)}/>
-        <Text style={styles.termsText}>
-          I accept the{' '}
-          <Text style={styles.link} onPress={openTermsAndConditions}>
-            Terms and Conditions
-          </Text>
-        </Text>
-      </View>
+                {/* Terms and Conditions */}
+                <View style={styles.termsContainer}>
+                    <Checkbox status={isChecked ? 'checked' : 'unchecked'}
+                        onPress={() => setIsChecked(!isChecked)} />
+                    <Text style={styles.termsText}>
+                        I accept the{' '}
+                        <Text style={styles.link} onPress={openTermsAndConditions}>
+                            Terms and Conditions
+                        </Text>
+                    </Text>
+                </View>
 
 
 
@@ -219,20 +219,22 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 10,
         height: 40,
+        backgroundColor: '#fff',
+        
     },
     termsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
-      },
-      termsText: {
+    },
+    termsText: {
         marginLeft: 10,
         color: '#555',
-      },
-      link: {
+    },
+    link: {
         color: '#1E90FF',
         textDecorationLine: 'underline',
-      },
+    },
     button: {
         backgroundColor: '#1D2231',
         paddingVertical: 10,
