@@ -1,15 +1,28 @@
-import React from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import {
+    View,
+    ScrollView,
+    StyleSheet,
+    SafeAreaView,
+    Dimensions,
+    TouchableOpacity,
+    StatusBar,
+    Platform,
+} from 'react-native';
 import {
     Text,
     Card,
     Title,
     Paragraph,
     Surface,
-    Avatar
+    Avatar,
+    ProgressBar
 } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { LineChart } from 'react-native-chart-kit';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootTabParamList } from '../../App';
+
 
 type NutritionScreenProps = NativeStackScreenProps<RootTabParamList, 'Nutrition'>;
 
@@ -38,8 +51,11 @@ const NutritionScreen: React.FC<NutritionScreenProps> = () => {
     ];
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
+        //  wraps the content with respect to status bar area
+                       //For android it is done dynamiccally while ios it automatic
+                       <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }]}>
+                       <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
+                       <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header}>
                     <Title style={styles.screenTitle}>Nutrition</Title>
                 </View>

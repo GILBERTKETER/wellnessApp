@@ -5,7 +5,9 @@ import {
     StyleSheet,
     SafeAreaView,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    StatusBar,
+    Platform,
 } from 'react-native';
 import {
     Text,
@@ -62,20 +64,23 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                {/* Header */}
-                <View style={styles.header}>
-                    <View>
-                        <Text style={styles.greeting}>Good Morning,</Text>
-                        <Title style={styles.username}>Sarah</Title>
-                    </View>
-                    <Avatar.Icon
-                        size={50}
-                        icon="account"
-                        style={styles.avatar}
-                    />
+        //  wraps the content with respect to status bar area
+        //For android it is done dynamiccally while ios it automatic
+        <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }]}>
+        <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
+        <ScrollView showsVerticalScrollIndicator={false}>
+            {/* Header */}
+            <View style={styles.header}>
+                <View>
+                    <Text style={styles.greeting}>Good Morning,</Text>
+                    <Title style={styles.username}>Sarah</Title>
                 </View>
+                <Avatar.Icon
+                    size={50}
+                    icon="account"
+                    style={styles.avatar}
+                />
+            </View>
 
                 {/* Daily Goals */}
                 <Text style={styles.sectionTitle}>Daily Goals</Text>

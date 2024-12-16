@@ -1,5 +1,14 @@
-import React from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import {
+    View,
+    ScrollView,
+    StyleSheet,
+    SafeAreaView,
+    Dimensions,
+    TouchableOpacity,
+    StatusBar,
+    Platform,
+} from 'react-native';
 import {
     Text,
     Card,
@@ -7,13 +16,15 @@ import {
     Paragraph,
     Surface,
     Avatar,
+    ProgressBar,
     Switch,
     Divider,
-    List
+    List,
 } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { LineChart } from 'react-native-chart-kit';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootTabParamList } from '../../App';
-
 type ProfileScreenProps = NativeStackScreenProps<RootTabParamList, 'Profile'>;
 
 const ProfileScreen: React.FC<ProfileScreenProps> = () => {
@@ -48,8 +59,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = () => {
     ];
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
+              //  wraps the content with respect to status bar area
+                //For android it is done dynamiccally while ios it automatic
+                <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }]}>
+                <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
+                <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header}>
                     <View style={styles.profileHeaderContent}>
                         <Avatar.Image
