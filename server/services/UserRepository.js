@@ -1,21 +1,8 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
-
-export interface IUser extends Document {
-    id: string;
-    email: string;
-    password: string;
-    firstName?: string;
-    lastName?: string;
-    refreshToken?: string;
-    isActive: boolean;
-    lastLogin?: Date;
-    createdAt: Date;
-    updatedAt: Date;
-}
+const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 // User Schema
-const UserSchema: Schema = new Schema({
+const UserSchema = new mongoose.Schema({
     id: {
         type: String,
         required: true,
@@ -61,7 +48,7 @@ const UserSchema: Schema = new Schema({
 });
 
 // Virtual for full name
-UserSchema.virtual('fullName').get(function (this: IUser) {
+UserSchema.virtual('fullName').get(function () {
     return `${this.firstName || ''} ${this.lastName || ''}`.trim();
 });
 
@@ -70,40 +57,33 @@ UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ id: 1 }, { unique: true });
 
 // Static methods
-UserSchema.statics.findByEmail = function (email: string) {
+UserSchema.statics.findByEmail = function (email) {
     return this.findOne({ email: email.toLowerCase() });
 };
 
 // model
-const UserModel = mongoose.model<IUser>('User', UserSchema);
+const UserModel = mongoose.model('User', UserSchema);
 
 // Repository class
 class UserRepository {
-    private model: Model<IUser>;
-
     constructor() {
         this.model = UserModel;
     }
 
     // Find user by email
-    async findByEmail(email: string) {
+    async findByEmail(email) {
         return this.model.findOne({
             email: email.toLowerCase()
         });
     }
 
     // Find user by ID
-    async findById(id: string) {
+    async findById(id) {
         return this.model.findOne({ id });
     }
 
     // Create a new user
-    async create(userData: {
-        email: string,
-        password: string,
-        firstName?: string,
-        lastName?: string
-    }) {
+    async create(userData) {
         return this.model.create({
             email: userData.email,
             password: userData.password,
@@ -113,7 +93,7 @@ class UserRepository {
     }
 
     // Update refresh token
-    async updateRefreshToken(userId: string, refreshToken: string) {
+    async updateRefreshToken(userId, refreshToken) {
         return this.model.findOneAndUpdate(
             { id: userId },
             {
@@ -125,7 +105,7 @@ class UserRepository {
     }
 
     // Clear refresh token (logout)
-    async clearRefreshToken(userId: string) {
+    async clearRefreshToken(userId) {
         return this.model.findOneAndUpdate(
             { id: userId },
             {
@@ -137,7 +117,7 @@ class UserRepository {
     }
 
     // Update last login
-    async updateLastLogin(userId: string) {
+    async updateLastLogin(userId) {
         return this.model.findOneAndUpdate(
             { id: userId },
             {
@@ -149,7 +129,7 @@ class UserRepository {
     }
 
     // Soft delete / deactivate user
-    async deactivateUser(userId: string) {
+    async deactivateUser(userId) {
         return this.model.findOneAndUpdate(
             { id: userId },
             {
@@ -161,7 +141,7 @@ class UserRepository {
     }
 
     // Additional utility methods
-    async existsByEmail(email: string): Promise<boolean> {
+    async existsByEmail(email) {
         const user = await this.model.findOne({
             email: email.toLowerCase()
         });
@@ -169,4 +149,5 @@ class UserRepository {
     }
 }
 
-export default new UserRepository();
+// Export an instance of the repository
+module.exports = new UserRepository();
