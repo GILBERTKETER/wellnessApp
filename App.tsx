@@ -12,12 +12,15 @@ import WorkoutScreen from './Screens/WorkoutScreen';
 import NutritionScreen from './Screens/NutritionScreen';
 import MindfulnessScreen from './Screens/MindfulnessScreen';
 import ProfileScreen from './Screens/ProfileScreen';
+import ServicePage from './Screens/Services';
+
 
 // Import new screens
 import LandingScreen from './Screens/LandingScreen';
 import OnboardingScreen from './Screens/OnboardingScreen';
 import LoginScreen from './Screens/Auth';
 import SignupScreen from './Screens/Signup';
+import ServiceDetailsScreen from './Screens/ServiceSingleVendor';
 
 // Define the type for our Stack Navigator
 export type RootStackParamList = {
@@ -26,6 +29,7 @@ export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   MainApp: undefined;
+  SingleServices: undefined;
 };
 
 // Define the type for our Tab Navigator
@@ -35,6 +39,7 @@ export type RootTabParamList = {
   Nutrition: undefined;
   Mindfulness: undefined;
   Profile: undefined;
+  Services: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -52,9 +57,12 @@ const BottomTabNavigator: React.FC = () => {
             case 'Home':
               iconName = focused ? 'home' : 'home-outline';
               break;
-            case 'Workout':
-              iconName = focused ? 'fitness' : 'fitness-outline';
-              break;
+            // case 'Workout':
+            //   iconName = focused ? 'fitness' : 'fitness-outline';
+            //   break;
+              case 'Services':
+                iconName = focused ? 'leaf' : 'leaf-outline';
+                break;
             case 'Nutrition':
               iconName = focused ? 'nutrition' : 'nutrition-outline';
               break;
@@ -86,7 +94,8 @@ const BottomTabNavigator: React.FC = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Workout" component={WorkoutScreen} />
+      <Tab.Screen name="Services" component={ServicePage} />
+      {/* <Tab.Screen name="Workout" component={WorkoutScreen} /> */}
       <Tab.Screen name="Nutrition" component={NutritionScreen} />
       <Tab.Screen name="Mindfulness" component={MindfulnessScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
@@ -108,6 +117,7 @@ const App: React.FC = () => {
             <Stack.Screen name="Onboarding" component={OnboardingScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
+            <Stack.Screen name="SingleServices" component={ServiceDetailsScreen} />
             <Stack.Screen
               name="MainApp"
               component={BottomTabNavigator}
