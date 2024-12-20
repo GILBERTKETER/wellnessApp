@@ -82,7 +82,7 @@ const ServiceDetailsScreen: React.FC<ServiceDetailsScreenProps> = ({ navigation 
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button}>
-                  <MaterialCommunityIcons name="file-document" size={20} color="#fff" />
+                  <MaterialCommunityIcons name="web" size={20} color="#fff" />
                   <Text style={styles.buttonText}>Website</Text>
                 </TouchableOpacity>
               </View>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   cardHeader: {
-    backgroundColor: "#123456", // Matching the theme
+    backgroundColor: "#1D223170", // Matching the theme
     padding: 15,
   },
   locationContainer: {

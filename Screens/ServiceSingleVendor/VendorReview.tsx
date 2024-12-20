@@ -158,7 +158,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginBottom: 15,
-    height: 80,
+    minHeight: 80, // Minimum height for the text input
+    textAlignVertical: "top", // Ensures text starts from the top
   },
   submitButton: {
     backgroundColor: "#6200EA",

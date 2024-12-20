@@ -65,6 +65,10 @@ const dailyGoals = [
         return Number((progress / goal).toFixed(2));
     };
 
+
+    const messageCount = 5; // Example message count
+    const notificationCount = 3; // Example notification count
+
     return (
         //  wraps the content with respect to status bar area
         //For android it is done dynamiccally while ios it automatic
@@ -73,16 +77,40 @@ const dailyGoals = [
         <ScrollView showsVerticalScrollIndicator={false}>
             {/* Header */}
             <View style={styles.header}>
-                <View>
-                    <Text style={styles.greeting}>Good Morning,</Text>
-                    <Title style={styles.username}>Sarah</Title>
-                </View>
-                <Avatar.Icon
-                    size={50}
-                    icon="account"
-                    style={styles.avatar}
-                />
-            </View>
+  <View>
+    <Avatar.Icon
+      size={50}
+      icon="account"
+      style={styles.avatar}
+    />
+    <Text style={styles.greeting}>Good Morning,</Text>
+    <Title style={styles.username}>Sarah</Title>
+  </View>
+
+  {/* Icons Section */}
+  <View style={styles.iconSection}>
+    {/* Message Icon and Count */}
+    <View style={styles.iconContainer}>
+      <Icon name="message" size={24} color="#fff" />
+      {messageCount > 0 && (
+        <View style={styles.nunBox}>
+          <Text style={styles.nunText}>{messageCount}</Text>
+        </View>
+      )}
+    </View>
+
+    {/* Notification Bell Icon and Count */}
+    <View style={styles.iconContainer}>
+      <Icon name="bell" size={24} color="#fff" />
+      {notificationCount > 0 && (
+        <View style={styles.nunBox}>
+          <Text style={styles.nunText}>{notificationCount}</Text>
+        </View>
+      )}
+    </View>
+  </View>
+</View>
+
 
              {/* Daily Quote Section */}
       <DailyQuote />
@@ -222,6 +250,33 @@ const styles = StyleSheet.create({
     avatar: {
         backgroundColor: '#018786',
     },
+
+    iconSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+      iconContainer: {
+        marginLeft: 20, // Spacing between icons
+        backgroundColor: '#333', // Dark background for each icon container
+        padding: 8,
+        borderRadius: 12, // Rounded corners for the icon container
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      nunBox: {
+        backgroundColor: '#e74c3c', // Red background for the notification count
+        borderRadius: 50,
+        paddingVertical: 2,
+        paddingHorizontal: 6,
+        position: 'absolute',
+        top: -5,
+        right: -5,
+      },
+      nunText: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: 'bold',
+      },
     sectionTitle: {
         fontSize: 18,
         fontWeight: 'bold',
