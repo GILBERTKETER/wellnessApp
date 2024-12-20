@@ -15,6 +15,7 @@ import { Text, Card, Title, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootTabParamList } from '../../App';
+import ProfileCard from './ProfileCard';
 
 type NutritionScreenProps = NativeStackScreenProps<RootTabParamList, 'Health'>;
 
@@ -78,6 +79,10 @@ const NutritionScreen: React.FC<NutritionScreenProps> = () => {
           <Title style={styles.screenTitle}>Your Health Wellness</Title>
         </View>
 
+    
+         {/* Profile Section */}
+         <ProfileCard />
+
         <View style={styles.container}>
           <View style={styles.cardContainer}>
             {cardData.map((data) => renderCard(data))}
@@ -106,6 +111,8 @@ const NutritionScreen: React.FC<NutritionScreenProps> = () => {
           </Modal>
         )}
       </ScrollView>
+
+       
     </SafeAreaView>
   );
 };
