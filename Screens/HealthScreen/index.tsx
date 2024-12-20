@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootTabParamList } from '../../App';
 import ProfileCard from './ProfileCard';
-
+import WellnessSection from './ActionButtons';
 type NutritionScreenProps = NativeStackScreenProps<RootTabParamList, 'Health'>;
 
 const NutritionScreen: React.FC<NutritionScreenProps> = () => {
@@ -110,6 +110,10 @@ const NutritionScreen: React.FC<NutritionScreenProps> = () => {
             </View>
           </Modal>
         )}
+
+        
+         {/* action buttons Section */}
+         <WellnessSection />
       </ScrollView>
 
        
