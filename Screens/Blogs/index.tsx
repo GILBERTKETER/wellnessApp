@@ -102,10 +102,9 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    paddingVertical: 5, // Reduced padding to save space
+    paddingVertical: 10,
     paddingHorizontal: 5,
-    height: 45, // Slightly reduced height for a better fit
-    alignItems: "center", // Aligns buttons vertically in the center
+    height: 50,
   },
   filterButton: {
     paddingHorizontal: 15,
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     justifyContent: "center", // Center the text vertically
     alignItems: "center", // Center the text horizontally
-    marginRight: 10, // Space between buttons
+    marginRight: 10,
   },
   selectedFilter: { backgroundColor: "#123456" },
   filterText: { fontSize: 16, color: "#000" },
