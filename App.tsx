@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 // Import screens
 import HomeScreen from './Screens/HomeScreen';
 import WorkoutScreen from './Screens/WorkoutScreen';
-import NutritionScreen from './Screens/NutritionScreen';
+import NutritionScreen from './Screens/HealthScreen';
 import MindfulnessScreen from './Screens/MindfulnessScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import ServicePage from './Screens/Services';
