@@ -24,7 +24,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootTabParamList } from '../../App';
 
 
-type NutritionScreenProps = NativeStackScreenProps<RootTabParamList, 'Nutrition'>;
+type NutritionScreenProps = NativeStackScreenProps<RootTabParamList, 'Health'>;
 
 const NutritionScreen: React.FC<NutritionScreenProps> = () => {
     const nutritionStats = [

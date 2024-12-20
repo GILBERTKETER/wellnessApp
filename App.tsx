@@ -13,6 +13,7 @@ import NutritionScreen from './Screens/NutritionScreen';
 import MindfulnessScreen from './Screens/MindfulnessScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import ServicePage from './Screens/Services';
+import BlogPage from './Screens/Blogs';
 
 
 // Import new screens
@@ -21,6 +22,7 @@ import OnboardingScreen from './Screens/OnboardingScreen';
 import LoginScreen from './Screens/Auth';
 import SignupScreen from './Screens/Signup';
 import ServiceDetailsScreen from './Screens/ServiceSingleVendor';
+
 
 // Define the type for our Stack Navigator
 export type RootStackParamList = {
@@ -36,10 +38,11 @@ export type RootStackParamList = {
 export type RootTabParamList = {
   Home: undefined;
   Workout: undefined;
-  Nutrition: undefined;
+  Health: undefined;
   Mindfulness: undefined;
   Profile: undefined;
   Services: undefined;
+  Blogs: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -63,12 +66,16 @@ const BottomTabNavigator: React.FC = () => {
               case 'Services':
                 iconName = focused ? 'leaf' : 'leaf-outline';
                 break;
-            case 'Nutrition':
+            case 'Health':
               iconName = focused ? 'nutrition' : 'nutrition-outline';
               break;
-            case 'Mindfulness':
-              iconName = focused ? 'medkit' : 'medkit-outline';
+            // case 'Mindfulness':
+            //   iconName = focused ? 'medkit' : 'medkit-outline';
+            //   break;
+            case 'Blogs':
+              iconName = focused ? 'newspaper' : 'newspaper-outline';
               break;
+
             case 'Profile':
               iconName = focused ? 'person' : 'person-outline';
               break;
@@ -96,8 +103,9 @@ const BottomTabNavigator: React.FC = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Services" component={ServicePage} />
       {/* <Tab.Screen name="Workout" component={WorkoutScreen} /> */}
-      <Tab.Screen name="Nutrition" component={NutritionScreen} />
-      <Tab.Screen name="Mindfulness" component={MindfulnessScreen} />
+      <Tab.Screen name="Health" component={NutritionScreen} />
+      {/* <Tab.Screen name="Mindfulness" component={MindfulnessScreen} /> */}
+      <Tab.Screen name="Blogs" component={BlogPage} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

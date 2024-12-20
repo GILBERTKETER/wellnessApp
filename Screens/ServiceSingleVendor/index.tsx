@@ -1,67 +1,99 @@
 import React from "react";
-import { View, Text, 
-    StyleSheet, 
-    TouchableOpacity,
-     ScrollView
-     ,SafeAreaView,
-    StatusBar,
-    Platform,} from "react-native";
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../App';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  Platform,
+} from "react-native";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamList } from "../../App";
+import VendorReview from "./VendorReview";
 
-    type ServiceDetailsScreenProps = StackScreenProps<RootStackParamList, 'SingleServices'>;
-    
-    const ServiceDetailsScreen: React.FC<ServiceDetailsScreenProps> = ({ navigation }) => {
-  return (
-  <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }]}>
-      <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
+type ServiceDetailsScreenProps = StackScreenProps<RootStackParamList, "SingleServices">;
 
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Text style={styles.backText}>{"< Back"}</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Our Service</Text>
-      </View>
+const ServiceDetailsScreen: React.FC<ServiceDetailsScreenProps> = ({ navigation }) => {
+  const staticContent = [
+    { id: "header", type: "header" },
+    { id: "serviceCard", type: "serviceCard" },
+    { id: "description", type: "description" },
+    { id: "vendorReview", type: "vendorReview" },
+  ];
 
-      {/* Service Card */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle}>MedVina Yoga Studio</Text>
-        </View>
-
-        {/* Image Placeholder */}
-        <View style={styles.imagePlaceholder}>
-          <Text style={styles.imageText}>Image Placeholder</Text>
-        </View>
-
-        {/* Service Includes */}
-        <View style={styles.detailsContainer}>
-          <Text style={styles.detailsTitle}>Our Services </Text>
-          <Text style={styles.detailItem}>» Full body Massage</Text>
-          <Text style={styles.detailItem}>» Guided Meditation</Text>
-          <Text style={styles.detailItem}>» Morning Yoga</Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.requestButton}>
-              <Text style={styles.requestText}>Place Request</Text>
+  const renderItem = ({ item }: { item: { id: string; type: string } }) => {
+    switch (item.type) {
+      case "header":
+        return (
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.backButton}>
+              <Text style={styles.backText}>{"< Back"}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.saveButton}>
-              <Text style={styles.saveText}>Book Appointments</Text>
-            </TouchableOpacity>
+            <Text style={styles.headerTitle}>MedVina Yoga Studio</Text>
           </View>
-        </View>
-      </View>
+        );
+      case "serviceCard":
+        return (
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <Text style={styles.cardTitle}>
+                Book appointment or visit us at www.medvina.com
+              </Text>
+            </View>
+            <View style={styles.imagePlaceholder}>
+              <Text style={styles.imageText}>Image Placeholder</Text>
+            </View>
+            <View style={styles.detailsContainer}>
+              <Text style={styles.detailsTitle}>Our Services </Text>
+              <Text style={styles.detailItem}>» Full body Massage</Text>
+              <Text style={styles.detailItem}>» Guided Meditation</Text>
+              <Text style={styles.detailItem}>» Morning Yoga</Text>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.requestButton}>
+                  <Text style={styles.requestText}>Place Request</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.saveButton}>
+                  <Text style={styles.saveText}>Book Appointments</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        );
+      case "description":
+        return (
+          <>
+            <Text style={styles.descriptionTitle}>Description</Text>
+            <Text style={styles.descriptionText}>
+              We are located in Nairobi..... Lorem ipsum dolor sit amet consectetur adipisicing
+              elit. Qui sit repellat praesentium necessitatibus sequi consectetur iste totam ut
+              repellendus maxime dolore dignissimos aut, provident repudiandae alias quae
+              reprehenderit nemo saepe.
+            </Text>
+          </>
+        );
+      case "vendorReview":
+        return <VendorReview />;
+      default:
+        return null;
+    }
+  };
 
-      {/* Description */}
-      <Text style={styles.descriptionTitle}>Description</Text>
-      <Text style={styles.descriptionText}>
-        We are located in Nairobi.....
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui sit 
-        repellat praesentium necessitatibus sequi consectetur iste totam ut repellendus
-         maxime dolore dignissimos aut, provident repudiandae alias quae reprehenderit nemo saepe.
-      </Text>
-    </ScrollView>
+  return (
+    <SafeAreaView
+      style={[
+        styles.container,
+        { paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0 },
+      ]}
+    >
+      <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
+      <FlatList
+        data={staticContent}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.contentContainer}
+      />
     </SafeAreaView>
   );
 };
@@ -70,6 +102,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+  },
+  contentContainer: {
+    paddingBottom: 20, // Add padding for scrolling
   },
   header: {
     backgroundColor: "#123456",
