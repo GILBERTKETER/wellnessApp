@@ -8,10 +8,12 @@ import {
   SafeAreaView,
   StatusBar,
   Platform,
+  Image,
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import VendorReview from "./VendorReview";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 type ServiceDetailsScreenProps = StackScreenProps<RootStackParamList, "SingleServices">;
 
@@ -28,8 +30,8 @@ const ServiceDetailsScreen: React.FC<ServiceDetailsScreenProps> = ({ navigation 
       case "header":
         return (
           <View style={styles.header}>
-            <TouchableOpacity style={styles.backButton}>
-              <Text style={styles.backText}>{"< Back"}</Text>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+              <MaterialCommunityIcons name="arrow-left" size={24} color="#fff" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>MedVina Yoga Studio</Text>
           </View>
@@ -37,13 +39,20 @@ const ServiceDetailsScreen: React.FC<ServiceDetailsScreenProps> = ({ navigation 
       case "serviceCard":
         return (
           <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardTitle}>
-                Book appointment or visit us at www.medvina.com
-              </Text>
-            </View>
+           <View style={styles.cardHeader}>
+  <Text style={styles.cardTitle}>
+    Book appointment or visit us at www.medvina.com
+  </Text>
+  <View style={styles.locationContainer}>
+    <MaterialCommunityIcons name="map-marker" size={20} color="#fff" />
+    <Text style={styles.locationText}>Nairobi</Text>
+  </View>
+</View>
             <View style={styles.imagePlaceholder}>
-              <Text style={styles.imageText}>Image Placeholder</Text>
+              <Image
+                source={require('../../assets/uploads/spa.jpg')}
+                style={styles.image}
+              />
             </View>
             <View style={styles.detailsContainer}>
               <Text style={styles.detailsTitle}>Our Services </Text>
@@ -51,11 +60,30 @@ const ServiceDetailsScreen: React.FC<ServiceDetailsScreenProps> = ({ navigation 
               <Text style={styles.detailItem}>» Guided Meditation</Text>
               <Text style={styles.detailItem}>» Morning Yoga</Text>
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.requestButton}>
-                  <Text style={styles.requestText}>Place Request</Text>
+                <TouchableOpacity style={styles.button}>
+                  <MaterialCommunityIcons name="account-plus" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>Place Request</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.saveButton}>
-                  <Text style={styles.saveText}>Book Appointments</Text>
+                <TouchableOpacity style={styles.button}>
+                  <MaterialCommunityIcons name="calendar-check" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>Book Appointment</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                  <MaterialCommunityIcons name="message" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>Message</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                  <MaterialCommunityIcons name="account-box" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>View Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                  <MaterialCommunityIcons name="file-document" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>Catalogue</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button}>
+                  <MaterialCommunityIcons name="file-document" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>Website</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -87,7 +115,7 @@ const ServiceDetailsScreen: React.FC<ServiceDetailsScreenProps> = ({ navigation 
         { paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0 },
       ]}
     >
-      <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
+      <StatusBar backgroundColor="#123456" barStyle="light-content" />
       <FlatList
         data={staticContent}
         renderItem={renderItem}
@@ -104,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
   },
   contentContainer: {
-    paddingBottom: 20, // Add padding for scrolling
+    paddingBottom: 20,
   },
   header: {
     backgroundColor: "#123456",
@@ -114,10 +142,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 10,
-  },
-  backText: {
-    color: "#fff",
-    fontSize: 16,
   },
   headerTitle: {
     color: "#fff",
@@ -132,8 +156,18 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   cardHeader: {
-    backgroundColor: "#4A90E2",
+    backgroundColor: "#123456", // Matching the theme
     padding: 15,
+  },
+  locationContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: 5,
+  },
+  locationText: {
+    color: "#fff",
+    fontSize: 14,
+    marginLeft: 5,
   },
   cardTitle: {
     color: "#fff",
@@ -146,9 +180,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  imageText: {
-    color: "#fff",
-    fontSize: 14,
+  image: {
+    height: "100%",
+    width: "100%",
+    resizeMode: "cover",
   },
   detailsContainer: {
     padding: 15,
@@ -165,32 +200,24 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     marginTop: 15,
   },
-  requestButton: {
-    flex: 1,
-    backgroundColor: "#6200EA",
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginRight: 10,
+  button: {
+    flexDirection: "row",
     alignItems: "center",
-  },
-  requestText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  saveButton: {
-    flex: 1,
-    backgroundColor: "#03A9F4",
+    backgroundColor: "#123456",
     paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 5,
-    alignItems: "center",
+    marginBottom: 10,
+    width: "48%",
   },
-  saveText: {
+  buttonText: {
     color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    marginLeft: 5,
   },
   descriptionTitle: {
     fontSize: 18,
