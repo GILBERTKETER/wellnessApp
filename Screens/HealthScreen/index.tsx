@@ -21,10 +21,11 @@ type NutritionScreenProps = NativeStackScreenProps<RootTabParamList, 'Health'>;
 const NutritionScreen: React.FC<NutritionScreenProps> = () => {
   // Define the card data, including whether the menu icon should be shown and the icon colors
   const cardData = [
-    { title: 'Mental Health', description: 'Mental well-being information.', showMenu: true, icon: 'brain', iconColor: 'blue', menuItems: ['Yoga', 'Forum Activities'] },
-    { title: 'Dietary', description: 'Dietary information for a healthy lifestyle.', showMenu: false, icon: 'apple', iconColor: 'green', menuItems: [] },
-    { title: 'Physical', description: 'Physical health tips and routines.', showMenu: true, icon: 'weight-lifter', iconColor: 'red', menuItems: ['Gym'] },
-    { title: 'Meditation', description: 'Guidelines and benefits of meditation.', showMenu: false, icon: 'hand-peace', iconColor: 'purple', menuItems: [] },
+    { title: 'Mental Health', description: 'Mental well-being information.', showMenu: true, icon: 'brain', iconColor: '#07ABF4', menuItems: ['Yoga', 'Forum Activities'] },
+    { title: 'Dietary', description: 'Dietary information for a healthy lifestyle.', showMenu: false, icon: 'food', iconColor: '#04af5f', menuItems: [] },
+    { title: 'Physical Fit', description: 'Physical health tips and routines.', showMenu: true, icon: 'arm-flex', iconColor: '#121829a9', menuItems: ['Gym'] },
+    { title: 'General Wellness', description: 'Guidelines to live healthy free from illness', showMenu: false, icon: 'medical-bag', iconColor: 'orangered', menuItems: [] },
+    { title: 'Social Interactions', description: 'Guidelines to social interactions understanding one\'s fellings', showMenu: false, icon: 'account-group', iconColor: '#1D2231', menuItems: [] },
   ];
 
   const [visible, setVisible] = useState(false);
@@ -112,7 +113,7 @@ const NutritionScreen: React.FC<NutritionScreenProps> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 8,
     justifyContent: 'center',
   },
   header: {
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '48%',
-    marginBottom: 16,
+    marginBottom: 8,
     backgroundColor: 'white',
   },
   title: {
