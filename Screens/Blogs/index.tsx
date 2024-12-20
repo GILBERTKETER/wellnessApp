@@ -2,87 +2,40 @@ import React, { useState } from "react";
 import {
   View,
   TextInput,
-  FlatList,
+  ScrollView,
   TouchableOpacity,
   StyleSheet,
-  ImageBackground,
-  ScrollView,
   SafeAreaView,
   StatusBar,
   Platform,
 } from "react-native";
+import { Text } from "react-native-paper";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootTabParamList } from "../../App";
+import BlogSection from "./BlogSection"; // Ensure BlogSection is implemented
 
-import { Text } from 'react-native-paper';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootTabParamList } from '../../App';
-import { RootStackParamList } from '../../App';
+type BlogPageProps = NativeStackScreenProps<RootTabParamList, "Blogs">;
 
-const servicesData = [
-  {
-    id: "1",
-    category: "Yoga",
-    image: "Massage.jpg", // Name of the image
-    location: "Westlands",
-    vendorName: "Medvina Yoga Studio",
-    rating: 4.8,
-    isLiked: false,
-  },
-  {
-    id: "2",
-    category: "Spa",
-    image: "personal care01.jpg", // Name of the image
-    location: "Nairobi CBD",
-    vendorName: "Dians's Personal care",
-    rating: 4.5,
-    isLiked: true,
-  },
-  {
-    id: "3",
-    category: "Massage",
-    image: "personal care02.jpg", // Name of the image
-    location: "Runda",
-    vendorName: "Healing Touch Massage",
-    rating: 4.7,
-    isLiked: false,
-  },
-];
-
-type BlogPageProps = NativeStackScreenProps<RootTabParamList, 'Blogs'>;
-
-const BlogPage: React.FC<BlogPageProps> = ( {navigation} ) => {
-  const [services, setServices] = useState(servicesData);
+const BlogPage: React.FC<BlogPageProps> = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Toggle like button
-  const toggleLike = (id: String) => {
-    setServices((prevServices) =>
-      prevServices.map((service) =>
-        service.id === id ? { ...service, isLiked: !service.isLiked } : service
-      )
-    );
-  };
-
-  // Filter services based on category and search query
-  const filteredServices = services.filter(
-    (service) =>
-      (selectedCategory === "All" || service.category === selectedCategory) &&
-      service.vendorName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-
-  const openSingleBlog = () => {
-    // navigation.navigate(); // Navigate to the Service blogscreen
-};
-
   return (
-    <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }]}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0 },
+      ]}
+    >
       <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
       <View style={styles.container}>
         {/* Header Section */}
         <View style={styles.header}>
-          <Text style={styles.mainText}>Blogs, Be Aware of your Wellness</Text>
-          <Text style={styles.subText}>Read life changing blogs on how to live a healthy lifestyle, Live a comment and subscribe to receive notifications</Text>
+          <Text style={styles.mainText}>Blogs, Be Aware of Your Wellness</Text>
+          <Text style={styles.subText}>
+            Read life-changing blogs on how to live a healthy lifestyle. Leave
+            a comment and subscribe to receive notifications.
+          </Text>
           <TextInput
             style={styles.searchInput}
             placeholder="Search Blogs..."
@@ -92,48 +45,36 @@ const BlogPage: React.FC<BlogPageProps> = ( {navigation} ) => {
         </View>
 
         {/* Slidable Filter Buttons */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
-          {["All", "Bad Habits", "Healthy lifestyle",].map((category) => (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.filterContainer}
+        >
+          {["All", "Bad Habits", "Healthy Lifestyle"].map((category) => (
             <TouchableOpacity
               key={category}
-              style={[styles.filterButton, selectedCategory === category && styles.selectedFilter]}
+              style={[
+                styles.filterButton,
+                selectedCategory === category && styles.selectedFilter,
+              ]}
               onPress={() => setSelectedCategory(category)}
             >
-              <Text style={[styles.filterText, selectedCategory === category && styles.selectedFilterText]}>
+              <Text
+                style={[
+                  styles.filterText,
+                  selectedCategory === category && styles.selectedFilterText,
+                ]}
+              >
                 {category}
               </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
 
-        {/* Service Cards */}
-        <FlatList
-          data={filteredServices}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.card}
-            >
-              {/* Dynamic Image Handling */}
-              <ImageBackground
-                source={require('../../assets/uploads/personal care01.jpg')} // Local asset
-                style={styles.cardImage}
-              >
-                <View style={styles.cardContent}>
-                  <View style={styles.cardHeader}>
-                    <Text style={styles.cardRating}>⭐ {item.rating}</Text>
-                    <TouchableOpacity onPress={() => toggleLike(item.id)}>
-                      <Text style={styles.likeButton}>
-                        {item.isLiked ? "♥" : "♡"}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Text style={styles.cardVendor}>{item.vendorName}</Text>
-                  <Text style={styles.cardLocation}>{item.location}</Text>
-                </View>
-              </ImageBackground>
-            </TouchableOpacity>
-          )}
-          style={styles.serviceList}
+        {/* Blog Section */}
+        <BlogSection
+          selectedCategory={selectedCategory}
+          searchQuery={searchQuery}
         />
       </View>
     </SafeAreaView>
@@ -143,8 +84,13 @@ const BlogPage: React.FC<BlogPageProps> = ( {navigation} ) => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f5f5f5" },
   header: { padding: 20, backgroundColor: "#123456", alignItems: "center" },
-  mainText: { fontSize: 25, fontWeight: "bold", color: "#fff", marginBottom: 10 },
-  subText: { fontSize: 17, color: "#fff", marginBottom: 10},
+  mainText: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 10,
+  },
+  subText: { fontSize: 17, color: "#fff", marginBottom: 10 },
   searchInput: {
     width: "100%",
     backgroundColor: "#fff",
@@ -158,35 +104,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingVertical: 10,
     paddingHorizontal: 5,
-    flexWrap: 'nowrap', // Prevent wrapping if the container doesn't fit
+    height: 50,
   },
   filterButton: {
     paddingHorizontal: 15,
-    paddingVertical: 8,
+    height: 40, // Fixed height for consistency
     borderRadius: 20,
     backgroundColor: "#f0f0f0",
+    justifyContent: "center", // Center the text vertically
+    alignItems: "center", // Center the text horizontally
     marginRight: 10,
-    height: 40,  // Set fixed height for consistency
-    justifyContent: 'center', // Vertically center text
-    alignItems: 'center', // Horizontally center text
   },
   selectedFilter: { backgroundColor: "#123456" },
-  filterText: { 
-    fontSize: 16, 
-    color: "#000", 
-    textAlign: 'center', // Ensure text is centered
-    flexWrap: 'wrap', // Allow text wrapping if needed
-  },
+  filterText: { fontSize: 16, color: "#000" },
   selectedFilterText: { color: "#fff" },
-  serviceList: { paddingHorizontal: 10, marginTop: 10 },
-  card: { marginBottom: 15, borderRadius: 10, overflow: "hidden", elevation: 3 },
-  cardImage: { height: 200, justifyContent: "flex-end" },
-  cardContent: { padding: 10, backgroundColor: "#1D223170" },
-  cardHeader: { flexDirection: "row", justifyContent: "space-between", marginBottom: 5 },
-  cardRating: { color: "#FFD700", fontSize: 16, fontWeight: "bold" },
-  likeButton: { fontSize: 20, color: "#FFD700" },
-  cardVendor: { fontSize: 18, fontWeight: "bold", color: "#fff" },
-  cardLocation: { fontSize: 14, color: "#ddd" },
 });
-
 export default BlogPage;
