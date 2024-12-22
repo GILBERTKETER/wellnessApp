@@ -2,12 +2,19 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const apiClient = axios.create({
-  baseURL: "https://our-server-url.com/v1",
+  baseURL: "http://192.168.42.215:3000",  //for  local testing use your computer ip address
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+
+export const registerUser = async (name, email, password, confirmPassword) => {
+    // return apiClient.post('/register', { name, email, password, confirmPassword });    
+    const response = await apiClient.post('/register', { name, email, password, confirmPassword });
+    return response.data;   //response from the server to the client
+};
 
 // intercept and add the bearer token
 apiClient.interceptors.request.use(
@@ -103,6 +110,8 @@ const handleErrorResponse = (error) => {
 
     return Promise.reject(error);
 };
+
+
 
 // Generic API methods we can invoke and use directly
 export const ApiService = {

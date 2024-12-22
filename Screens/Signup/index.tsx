@@ -16,6 +16,8 @@ import {
 import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootStackParamList } from '../../App';
+// Import the registerUser function from api.js
+import {  registerUser } from '../../api/api';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,7 +30,7 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-    const handleSignup = () => {
+    const handleSignup = async () => {
         if (!isChecked) {
             alert('You must accept the Terms and Conditions to proceed.');
             return;
@@ -39,6 +41,20 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
         }
         // Signup logic here
         navigation.navigate('MainApp');
+
+        try {
+            const response = await registerUser(name, email, password, confirmPassword);
+
+            //store user id and authentication token in encrypted storage 
+            // await EncryptedStorage.setItem('userAuthToken', response.authToken);
+            // await EncryptedStorage.setItem('userId', response.userId);
+
+            alert(response.data.message);
+            navigation.navigate('MainApp');
+            
+          } catch (error: any) {
+            alert(error.response?.data?.message);//|| 'Registration failed'
+          }
     };
 
 

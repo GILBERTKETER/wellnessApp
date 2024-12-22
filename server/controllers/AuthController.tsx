@@ -36,7 +36,7 @@ class AuthController {
                 refreshToken,
                 user: {
                     id: user.id,
-                    email: user.email
+                    email: user.email 
                 }
             });
         } catch (error) {
@@ -80,7 +80,7 @@ class AuthController {
     // User registration method
     static async register(req: Request, res: Response) {
         try {
-            const { email, password } = req.body;
+            const { name, email, password, confirmPassword } = req.body;
 
             // Check if user already exists
             const existingUser = await UserRepository.findByEmail(email);

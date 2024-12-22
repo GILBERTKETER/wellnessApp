@@ -77,10 +77,16 @@ const NutritionScreen: React.FC<NutritionScreenProps> = () => {
     <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }]}>
       <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
       <ScrollView showsVerticalScrollIndicator={false}>
+
+
         <View style={styles.header}>
           <Title style={styles.screenTitle}>Your Health Wellness</Title>
         </View>
 
+    
+    
+    {/* action buttons Section */}
+    <WellnessSection />
     
          {/* Profile Section */}
          <ProfileCard />
@@ -114,8 +120,7 @@ const NutritionScreen: React.FC<NutritionScreenProps> = () => {
         )}
 
         
-         {/* action buttons Section */}
-         <WellnessSection />
+     
 
 
             {/* action buttons Section */}
