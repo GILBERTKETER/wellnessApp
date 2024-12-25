@@ -32,6 +32,7 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
     const handleSignup = async () => {
+        // Validate form inputs
         if (!isChecked) {
             alert('You must accept the Terms and Conditions to proceed.');
             return;
@@ -40,24 +41,38 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
             alert('Passwords do not match');
             return;
         }
-        // Signup logic here
-        navigation.navigate('MainApp');
-
+    
         try {
+            // Attempt to register the user
             const response = await registerUser(email, password, firstName, lastName);
-
-            //store user id and authentication token in encrypted storage 
-            // await EncryptedStorage.setItem('userAuthToken', response.authToken);
-            // await EncryptedStorage.setItem('userId', response.userId);
-
-            alert(response.data.message);
+    
+            // Destructure the response to get required data
+            const { userId, accessToken, refreshToken, message } = response;
+    
+            console.log('User registered:', response);  // Debugging purpose
+    
+            // Store the tokens and userId (if needed)
+            // await EncryptedStorage.setItem('userAuthToken', accessToken);
+            // await EncryptedStorage.setItem('userId', userId);
+    
+            alert(message);  // Show success message
+    
+            // Navigate to MainApp screen
             navigation.navigate('MainApp');
-            
-          } catch (error: any) {
-            alert(error.response?.data?.message);//|| 'Registration failed'
-          }
+    
+        } catch (error: unknown) {  // Handle the error as 'unknown' type
+            // Safely cast error to an Error type and get the message
+            const errorMessage = (error as Error).message || 'Registration failed. Please try again later.';
+    
+            if (errorMessage === 'User already exists') {
+                alert('The user already exists. Please try with a different email address.');
+            } else {
+                alert(errorMessage);
+            }
+        }
     };
-
+    
+    
 
 
     const openLoginPage = () => {

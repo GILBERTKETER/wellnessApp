@@ -10,11 +10,33 @@ const apiClient = axios.create({
 });
 
 
+// export const registerUser = async (email, password, firstName, lastName) => {
+//     // return apiClient.post('/register', { name, email, password, confirmPassword });    
+//     const response = await apiClient.post('/api/auth/register', { email, password, firstName, lastName });
+//     return response.data;   //response from the server to the client
+// };
+
+
+
+
 export const registerUser = async (email, password, firstName, lastName) => {
-    // return apiClient.post('/register', { name, email, password, confirmPassword });    
-    const response = await apiClient.post('/api/auth/register', { email, password, firstName, lastName });
-    return response.data;   //response from the server to the client
+    try {
+        // Attempt to register the user
+        const response = await apiClient.post('/api/auth/register', { email, password, firstName, lastName });
+        return response.data;  // On success, return the response data
+    } catch (error) {
+        // If the error response contains data, handle it
+        if (error.response && error.response.data) {
+            const { message } = error.response.data;
+            // Throw a custom error message based on the server response
+            throw new Error(message || 'Registration failed');
+        } else {
+            // If no response or an unexpected error occurred, throw a generic error
+            throw new Error('Registration failed. Please try again later.');
+        }
+    }
 };
+
 
 // intercept and add the bearer token
 apiClient.interceptors.request.use(
