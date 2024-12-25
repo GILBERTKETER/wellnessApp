@@ -24,7 +24,8 @@ const { width, height } = Dimensions.get('window');
 type SignupScreenProps = StackScreenProps<RootStackParamList, 'Signup'>;
 
 const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
-    const [name, setName] = useState('');
+    const [lastName, setFName] = useState('');
+    const [firstName, setLName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -43,7 +44,7 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
         navigation.navigate('MainApp');
 
         try {
-            const response = await registerUser(name, email, password, confirmPassword);
+            const response = await registerUser(email, password, firstName, lastName);
 
             //store user id and authentication token in encrypted storage 
             // await EncryptedStorage.setItem('userAuthToken', response.authToken);
@@ -85,9 +86,20 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
                     <Icon name="account" size={20} color="#888" />
                     <TextInput
                         style={styles.input}
-                        placeholder="Full Name"
-                        value={name}
-                        onChangeText={setName}
+                        placeholder="First Name"
+                        value={firstName}
+                        onChangeText={setFName}
+                    />
+                </View>
+
+
+                <View style={styles.inputContainer}>
+                    <Icon name="account" size={20} color="#888" />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="last Name"
+                        value={lastName}
+                        onChangeText={setLName}
                     />
                 </View>
 

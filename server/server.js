@@ -63,7 +63,7 @@ class Server {
     }
   }
 }
-
+ 
 // Create and start the server
 const server = new Server();
 server.start();

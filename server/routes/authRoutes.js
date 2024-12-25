@@ -1,5 +1,5 @@
 const express = require("express");
-const UserRepository = require("../../services/UserRepository");
+const UserRepository = require("../services/UserRepository");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");

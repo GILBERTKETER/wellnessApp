@@ -78,7 +78,7 @@ const BlogPageSection: React.FC<BlogPageSectionProps> = ({ selectedCategory, sea
                     </View>
                 )}
             </ScrollView>
-        </SafeAreaView>
+         </SafeAreaView>
     );
 };
 
