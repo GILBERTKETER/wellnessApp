@@ -21,19 +21,29 @@ const apiClient = axios.create({
 
 export const registerUser = async (email, password, firstName, lastName) => {
     try {
-        // Attempt to register the user
-        const response = await apiClient.post('/api/auth/register', { email, password, firstName, lastName });
-        return response.data;  // On success, return the response data
+        const response = await apiClient.post('/api/auth/register', {
+            email,
+            password,
+            firstName,
+            lastName,
+        });
+
+        // Return the standardized response
+        return response.data;
     } catch (error) {
-        // If the error response contains data, handle it
         if (error.response && error.response.data) {
-            const { message } = error.response.data;
-            // Throw a custom error message based on the server response
-            throw new Error(message || 'Registration failed');
-        } else {
-            // If no response or an unexpected error occurred, throw a generic error
-            throw new Error('Registration failed. Please try again later.');
+            const { code, message, status } = error.response.data;
+
+            // Log the error for debugging
+            console.error(`API Error: ${status} (${code}) - ${message}`);
+
+            // Throw a custom error message
+            throw new Error(message || 'An unexpected error occurred.');
         }
+
+        // Handle network or unexpected errors
+        console.error('Network Error:', error);
+        throw new Error('Registration failed. Please check your network and try again.');
     }
 };
 

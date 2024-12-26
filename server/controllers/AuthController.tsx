@@ -2,26 +2,34 @@ import { Request, Response } from 'express';
 import AuthService from '../services/AuthService';
 import UserRepository from '../services/UserRepository';
 
+// Helper to standardize response initialization
+const initializeResponse = (res: Response) => {
+    return (statusCode: number, status: 'success' | 'error', message: string, data: any = null) => {
+        res.status(statusCode).json({
+            status,
+            message,
+            data,
+        });
+    };
+};
+
 class AuthController {
     // User login method
     static async login(req: Request, res: Response) {
+        const sendResponse = initializeResponse(res);
         try {
             const { email, password } = req.body;
 
             // Find user by email
             const user = await UserRepository.findByEmail(email);
             if (!user) {
-                return res.status(401).json({ message: 'Invalid credentials' });
+                return sendResponse(401, 'error', 'Invalid credentials');
             }
 
             // Compare passwords
-            const isPasswordValid = await AuthService.comparePassword(
-                password,
-                user.password
-            );
-
+            const isPasswordValid = await AuthService.comparePassword(password, user.password);
             if (!isPasswordValid) {
-                return res.status(401).json({ message: 'Invalid credentials' });
+                return sendResponse(401, 'error', 'Invalid credentials');
             }
 
             // Generate tokens
@@ -31,34 +39,35 @@ class AuthController {
             // Store refresh token in database 
             await UserRepository.updateRefreshToken(user.id, refreshToken);
 
-            res.json({
+            sendResponse(200, 'success', 'Login successful', {
                 accessToken,
                 refreshToken,
                 user: {
                     id: user.id,
-                    email: user.email 
-                }
+                    email: user.email,
+                },
             });
         } catch (error) {
-            res.status(500).json({ message: 'Server error during login' });
+            sendResponse(500, 'error', 'Server error during login');
         }
     }
 
     // Token refresh method
     static async refreshToken(req: Request, res: Response) {
+        const sendResponse = initializeResponse(res);
         try {
             const { refreshToken } = req.body;
 
             // Verify refresh token
             const decoded = AuthService.verifyRefreshToken(refreshToken);
             if (!decoded) {
-                return res.status(401).json({ message: 'Invalid refresh token' });
+                return sendResponse(401, 'error', 'Invalid refresh token');
             }
 
             // Find user and validate stored refresh token
             const user = await UserRepository.findById(decoded.userId);
             if (!user || user.refreshToken !== refreshToken) {
-                return res.status(401).json({ message: 'Invalid refresh token' });
+                return sendResponse(401, 'error', 'Invalid refresh token');
             }
 
             // Generate new tokens
@@ -68,24 +77,25 @@ class AuthController {
             // Update refresh token in database
             await UserRepository.updateRefreshToken(user.id, newRefreshToken);
 
-            res.json({
+            sendResponse(200, 'success', 'Token refreshed successfully', {
                 accessToken: newAccessToken,
-                refreshToken: newRefreshToken
+                refreshToken: newRefreshToken,
             });
         } catch (error) {
-            res.status(500).json({ message: 'Server error during token refresh' });
+            sendResponse(500, 'error', 'Server error during token refresh');
         }
     }
 
     // User registration method
     static async register(req: Request, res: Response) {
+        const sendResponse = initializeResponse(res);
         try {
             const { name, email, password, confirmPassword } = req.body;
 
             // Check if user already exists
             const existingUser = await UserRepository.findByEmail(email);
             if (existingUser) {
-                return res.status(400).json({ message: 'User already exists' });
+                return sendResponse(400, 'error', 'User already exists');
             }
 
             // Hash password
@@ -94,7 +104,7 @@ class AuthController {
             // Create new user
             const newUser = await UserRepository.create({
                 email,
-                password: hashedPassword
+                password: hashedPassword,
             });
 
             // Generate tokens
@@ -104,30 +114,31 @@ class AuthController {
             // Store refresh token
             await UserRepository.updateRefreshToken(newUser.id, refreshToken);
 
-            res.status(201).json({
+            sendResponse(201, 'success', 'User registered successfully', {
                 accessToken,
                 refreshToken,
                 user: {
                     id: newUser.id,
-                    email: newUser.email
-                }
+                    email: newUser.email,
+                },
             });
         } catch (error) {
-            res.status(500).json({ message: 'Server error during registration' });
+            sendResponse(500, 'error', 'Server error during registration');
         }
     }
 
     // Logout
     static async logout(req: Request, res: Response) {
+        const sendResponse = initializeResponse(res);
         try {
-            const userId = req.user?.id; 
+            const userId = req.user?.id;
 
             // Remove refresh token from database
             await UserRepository.clearRefreshToken(userId);
 
-            res.json({ message: 'Logged out successfully' });
+            sendResponse(200, 'success', 'Logged out successfully');
         } catch (error) {
-            res.status(500).json({ message: 'Server error during logout' });
+            sendResponse(500, 'error', 'Server error during logout');
         }
     }
 }

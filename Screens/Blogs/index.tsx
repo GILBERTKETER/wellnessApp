@@ -101,10 +101,10 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     flexDirection: "row",
-    backgroundColor: "red",
+    backgroundColor: "#fff",
     paddingVertical: 10,
     paddingHorizontal: 5,
-    height: 40,
+    height: 10,
     flexWrap: 'nowrap', // Prevent wrapping if the container doesn't fit
     
   },

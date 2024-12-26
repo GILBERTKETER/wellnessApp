@@ -32,7 +32,6 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
     const handleSignup = async () => {
-        // Validate form inputs
         if (!isChecked) {
             alert('You must accept the Terms and Conditions to proceed.');
             return;
@@ -43,34 +42,34 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
         }
     
         try {
-            // Attempt to register the user
             const response = await registerUser(email, password, firstName, lastName);
     
-            // Destructure the response to get required data
-            const { userId, accessToken, refreshToken, message } = response;
+            const { status, message, data } = response;
     
-            console.log('User registered:', response);  // Debugging purpose
+            if (status === "success") {
+                const { userId, accessToken, refreshToken } = data;
     
-            // Store the tokens and userId (if needed)
-            // await EncryptedStorage.setItem('userAuthToken', accessToken);
-            // await EncryptedStorage.setItem('userId', userId);
+                console.log('User registered:', data);
     
-            alert(message);  // Show success message
-    
-            // Navigate to MainApp screen
-            navigation.navigate('MainApp');
-    
-        } catch (error: unknown) {  // Handle the error as 'unknown' type
-            // Safely cast error to an Error type and get the message
-            const errorMessage = (error as Error).message || 'Registration failed. Please try again later.';
+                // Store tokens and navigate
+                alert(message);
+                navigation.navigate('MainApp');
+            } else {
+                alert(message || 'An unexpected error occurred.');
+            }
+        } catch (error) {
+            const errorMessage =
+                (error as Error).message || 'An unexpected error occurred.';
     
             if (errorMessage === 'User already exists') {
-                alert('The user already exists. Please try with a different email address.');
-            } else {
                 alert(errorMessage);
+            } else {
+                alert('Registration failed: ' + errorMessage);
             }
         }
     };
+    
+    
     
     
 
