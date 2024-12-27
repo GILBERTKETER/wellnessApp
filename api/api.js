@@ -20,32 +20,15 @@ const apiClient = axios.create({
 
 
 export const registerUser = async (email, password, firstName, lastName) => {
-    try {
-        const response = await apiClient.post('/api/auth/register', {
-            email,
-            password,
-            firstName,
-            lastName,
-        });
+    const response = await apiClient.post('/api/auth/register', { email, password, firstName, lastName });
+    return response.data; // Return the server response directly
+  };
+  
 
-        // Return the standardized response
-        return response.data;
-    } catch (error) {
-        if (error.response && error.response.data) {
-            const { code, message, status } = error.response.data;
+  
+  
 
-            // Log the error for debugging
-            console.error(`API Error: ${status} (${code}) - ${message}`);
 
-            // Throw a custom error message
-            throw new Error(message || 'An unexpected error occurred.');
-        }
-
-        // Handle network or unexpected errors
-        console.error('Network Error:', error);
-        throw new Error('Registration failed. Please check your network and try again.');
-    }
-};
 
 
 // intercept and add the bearer token

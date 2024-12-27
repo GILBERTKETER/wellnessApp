@@ -2,7 +2,8 @@ const express = require("express");
 const UserRepository = require("../services/UserRepository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+ 
+//lets us 200 as default response code 
 class AuthRoutes {
   constructor() {
     this.router = express.Router();
@@ -42,16 +43,24 @@ class AuthRoutes {
       const { email, password, firstName, lastName } = req.body;
 
       if (!email || !password) {
-        return res
-          .status(400)
-          .json(this.createResponse({ message: "Email and password are required", code: 400, status: "error" }));
+        return res.json(
+          this.createResponse({
+            message: "Email and password are required",
+            code: 400,
+            status: "error",
+          })
+        );
       }
 
       const existingUser = await UserRepository.existsByEmail(email);
       if (existingUser) {
-        return res
-          .status(409)
-          .json(this.createResponse({ message: "User already exists", code: 409, status: "error" }));
+        return res.json(
+          this.createResponse({
+            message: "User already exists",
+            code: 409,
+            status: "error",
+          })
+        );
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -66,19 +75,23 @@ class AuthRoutes {
       const refreshToken = this.generateRefreshToken(newUser.id);
       await UserRepository.updateRefreshToken(newUser.id, refreshToken);
 
-      res
-        .status(201)
-        .json(this.createResponse({
+      res.json(
+        this.createResponse({
           message: "User registered successfully",
           code: 201,
           status: "success",
           data: { userId: newUser.id, accessToken, refreshToken },
-        }));
+        })
+      );
     } catch (error) {
       console.error("Registration error:", error);
-      res
-        .status(500)
-        .json(this.createResponse({ message: "Registration failed", code: 500, status: "error" }));
+      res.json(
+        this.createResponse({
+          message: "Registration failed",
+          code: 500,
+          status: "error",
+        })
+      );
     }
   }
 
@@ -89,22 +102,34 @@ class AuthRoutes {
 
       const user = await UserRepository.findByEmail(email);
       if (!user) {
-        return res
-          .status(401)
-          .json(this.createResponse({ message: "Invalid credentials", code: 401, status: "error" }));
+        return res.json(
+          this.createResponse({
+            message: "Invalid credentials",
+            code: 401,
+            status: "error",
+          })
+        );
       }
 
       if (!user.isActive) {
-        return res
-          .status(403)
-          .json(this.createResponse({ message: "User account is deactivated", code: 403, status: "error" }));
+        return res.json(
+          this.createResponse({
+            message: "User account is deactivated",
+            code: 403,
+            status: "error",
+          })
+        );
       }
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        return res
-          .status(401)
-          .json(this.createResponse({ message: "Invalid credentials", code: 401, status: "error" }));
+        return res.json(
+          this.createResponse({
+            message: "Invalid credentials",
+            code: 401,
+            status: "error",
+          })
+        );
       }
 
       const accessToken = this.generateAccessToken(user.id);
@@ -112,19 +137,23 @@ class AuthRoutes {
       await UserRepository.updateRefreshToken(user.id, refreshToken);
       await UserRepository.updateLastLogin(user.id);
 
-      res
-        .status(200)
-        .json(this.createResponse({
+      res.json(
+        this.createResponse({
           message: "Login successful",
           code: 200,
           status: "success",
           data: { userId: user.id, accessToken, refreshToken },
-        }));
+        })
+      );
     } catch (error) {
       console.error("Login error:", error);
-      res
-        .status(500)
-        .json(this.createResponse({ message: "Login failed", code: 500, status: "error" }));
+      res.json(
+        this.createResponse({
+          message: "Login failed",
+          code: 500,
+          status: "error",
+        })
+      );
     }
   }
 
@@ -134,14 +163,22 @@ class AuthRoutes {
       const userId = req.user.id;
       await UserRepository.clearRefreshToken(userId);
 
-      res
-        .status(200)
-        .json(this.createResponse({ message: "Logout successful", code: 200, status: "success" }));
+      res.json(
+        this.createResponse({
+          message: "Logout successful",
+          code: 200,
+          status: "success",
+        })
+      );
     } catch (error) {
       console.error("Logout error:", error);
-      res
-        .status(500)
-        .json(this.createResponse({ message: "Logout failed", code: 500, status: "error" }));
+      res.json(
+        this.createResponse({
+          message: "Logout failed",
+          code: 500,
+          status: "error",
+        })
+      );
     }
   }
 
@@ -152,36 +189,54 @@ class AuthRoutes {
 
       const user = await UserRepository.findById(userId);
       if (!user) {
-        return res
-          .status(404)
-          .json(this.createResponse({ message: "User not found", code: 404, status: "error" }));
+        return res.json(
+          this.createResponse({
+            message: "User not found",
+            code: 404,
+            status: "error",
+          })
+        );
       }
 
-      const { password, refreshToken, ...userProfile } = user.toObject ? user.toObject() : user;
+      const { password, refreshToken, ...userProfile } = user.toObject
+        ? user.toObject()
+        : user;
 
-      res
-        .status(200)
-        .json(this.createResponse({
+      res.json(
+        this.createResponse({
           message: "Profile retrieved successfully",
           code: 200,
           status: "success",
           data: userProfile,
-        }));
+        })
+      );
     } catch (error) {
       console.error("Profile retrieval error:", error);
-      res
-        .status(500)
-        .json(this.createResponse({ message: "Failed to retrieve profile", code: 500, status: "error" }));
+      res.json(
+        this.createResponse({
+          message: "Failed to retrieve profile",
+          code: 500,
+          status: "error",
+        })
+      );
     }
   }
 
   // JWT Token Generation
   generateAccessToken(userId) {
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET || "jwt_secret", { expiresIn: "15m" });
+    return jwt.sign(
+      { id: userId },
+      process.env.JWT_SECRET || "jwt_secret",
+      { expiresIn: "15m" }
+    );
   }
 
   generateRefreshToken(userId) {
-    return jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET || "jwt_refresh_secret", { expiresIn: "7d" });
+    return jwt.sign(
+      { id: userId },
+      process.env.JWT_REFRESH_SECRET || "jwt_refresh_secret",
+      { expiresIn: "7d" }
+    );
   }
 
   // Authentication Middleware
@@ -190,19 +245,30 @@ class AuthRoutes {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
-      return res
-        .status(401)
-        .json(this.createResponse({ message: "No token provided", code: 401, status: "error" }));
+      return res.json(
+        this.createResponse({
+          message: "No token provided",
+          code: 401,
+          status: "error",
+        })
+      );
     }
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || "jwt_secret");
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET || "jwt_secret"
+      );
       req.user = decoded;
       next();
     } catch (error) {
-      return res
-        .status(403)
-        .json(this.createResponse({ message: "Invalid or expired token", code: 403, status: "error" }));
+      return res.json(
+        this.createResponse({
+          message: "Invalid or expired token",
+          code: 403,
+          status: "error",
+        })
+      );
     }
   }
 }

@@ -5,6 +5,8 @@ import {
     Dimensions,
     TouchableOpacity,
     Linking,
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 import {
     Text,
@@ -19,6 +21,8 @@ import { RootStackParamList } from '../../App';
 // Import the registerUser function from api.js
 import {  registerUser } from '../../api/api';
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const { width, height } = Dimensions.get('window');
 
 type SignupScreenProps = StackScreenProps<RootStackParamList, 'Signup'>;
@@ -30,44 +34,62 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [secureTextEntry, setSecureTextEntry] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSignup = async () => {
         if (!isChecked) {
-            alert('You must accept the Terms and Conditions to proceed.');
-            return;
+          Alert.alert("Terms and Conditions", "You must accept the Terms and Conditions to proceed.");
+          return;
         }
+      
         if (password !== confirmPassword) {
-            alert('Passwords do not match');
-            return;
+          Alert.alert("Password Mismatch", "Passwords do not match.");
+          return;
         }
-    
+      
+        setIsLoading(true); // Show loader
+      
         try {
-            const response = await registerUser(email, password, firstName, lastName);
-    
-            const { status, message, data } = response;
-    
-            if (status === "success") {
-                const { userId, accessToken, refreshToken } = data;
-    
-                console.log('User registered:', data);
-    
-                // Store tokens and navigate
-                alert(message);
-                navigation.navigate('MainApp');
-            } else {
-                alert(message || 'An unexpected error occurred.');
-            }
+          const response = await registerUser(email, password, firstName, lastName);
+      
+          // Check if response is valid or timeout occurred
+          if (!response || response.status === 0 || typeof response !== "object") {
+            Alert.alert("Error", "No response from server. Please try again later.");
+            return;
+          }
+      
+          const { status, message, data } = response;
+      
+          if (status === "success" && data) {
+            const { userId, accessToken, refreshToken } = data;
+      
+            console.log("User registered:", data);
+      
+            Alert.alert("Success", message);
+            navigation.navigate("MainApp");
+          } else {
+            Alert.alert("Error", message || "An unexpected error occurred.");
+          }
         } catch (error) {
-            const errorMessage =
-                (error as Error).message || 'An unexpected error occurred.';
-    
-            if (errorMessage === 'User already exists') {
-                alert(errorMessage);
-            } else {
-                alert('Registration failed: ' + errorMessage);
-            }
+          let errorMessage = "An unexpected error occurred.";
+      
+          if (error instanceof Error) {
+            errorMessage = error.message;
+          }
+      
+          Alert.alert("Error", errorMessage);
+        } finally {
+          setIsLoading(false);
         }
-    };
+      };
+      
+      
+      
+      
+      
+
+      
+    
     
     
     
@@ -182,10 +204,14 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
 
 
 
-                {/* Sign Up Button */}
-                <TouchableOpacity style={styles.button} onPress={handleSignup}>
-                    <Text style={styles.buttonText}>Sign Up</Text>
-                </TouchableOpacity>
+               {/* Sign Up Button */}
+{isLoading ? (
+  <ActivityIndicator size="large" color="#0000ff" />
+) : (
+  <TouchableOpacity style={styles.button} onPress={handleSignup}>
+    <Text style={styles.buttonText}>Sign Up</Text>
+  </TouchableOpacity>
+)}
 
                 {/* Divider */}
                 <Text style={styles.divider}>Or sign up with</Text>
