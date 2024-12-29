@@ -5,6 +5,9 @@ import {
     Dimensions,
     TouchableOpacity,
     Linking,
+    Modal,
+    ActivityIndicator,
+    Alert,
 } from 'react-native';
 import {
     Text,
@@ -16,6 +19,9 @@ import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { RootStackParamList } from '../../App';
+import { checkInternetConnection, checkAPIReachability } from '../../utils/networkUtils';
+// Import the registerUser function from api.js
+import { loginUser } from '../../api/api';
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,15 +38,62 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         navigation.navigate('Signup'); // Navigate to the Signup screen
     };
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         // Implement login logic
+
+
+            // Ensure fields are not empty
+    if (!email.trim()) {
+        Alert.alert("Validation Error", "Email is required.");
+        return;
+    }
+    if (!password.trim()) {
+        Alert.alert("Validation Error", "Password is required.");
+        return;
+    }
+    
         setIsLoading(true);
 
 
-
-
-
-        navigation.navigate('MainApp');
+            try {
+                   // Check internet connection
+                   const isConnected = await checkInternetConnection();
+                   if (!isConnected) {
+                       Alert.alert("No Internet", "Please check your internet connection and try again.");
+                       setIsLoading(false);
+                       return;
+                   }
+       
+                   // Check API reachability
+                   const apiBaseUrl = "http://192.168.42.215:3000"; // Replace with your actual API base URL
+                   const isApiReachable = await checkAPIReachability(apiBaseUrl);
+                   if (!isApiReachable) {
+                       Alert.alert("Server Unreachable", "The server is currently unreachable. Please try again later.");
+                       setIsLoading(false);
+                       return;
+                   }
+       
+                   const response = await loginUser(email, password );
+                   if (response?.status === "success" && response.data) {
+                       const { userId, accessToken, refreshToken } = response.data;
+       
+                       // Save tokens to AsyncStorage
+                    //    await AsyncStorage.multiSet([
+                    //        ["@accessToken", accessToken],
+                    //        ["@refreshToken", refreshToken],
+                    //        ["@userId", userId]
+                    //    ]);
+       
+                       Alert.alert("Success", response.message);
+                       navigation.navigate("MainApp");
+                   } else {
+                       Alert.alert("Error", response?.message || "An unexpected error occurred.");
+                   }
+               } catch (error) {
+                   Alert.alert("Error", error instanceof Error ? error.message : "An unexpected error occurred.");
+               } finally {
+                   setIsLoading(false);
+               }
     };
 
 
@@ -130,6 +183,21 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 </Text>
 
             </Surface>
+
+              {/* Modal Loader */}
+                            <Modal
+                                transparent={true}
+                                animationType="fade"
+                                visible={isLoading}
+                                onRequestClose={() => { }}
+                            >
+                                <View style={styles.modalContainer}>
+                                    <View style={styles.modalContent}>
+                                        <ActivityIndicator size="large" color="#0000ff" />
+                                        <Text style={styles.modalText}>Logging you in Please wait...</Text>
+                                    </View>
+                                </View>
+                            </Modal>
         </View>
     );
 };
@@ -233,7 +301,26 @@ const styles = StyleSheet.create({
         color: '#1E90FF',
         fontWeight: 'bold',
     },
-
+    // modal loader
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+        width: '80%',
+    
+    },
+    modalText: {
+        marginTop: 10,
+        fontSize: 16,
+        color: '#333',
+    },
 });
 
 export default LoginScreen;

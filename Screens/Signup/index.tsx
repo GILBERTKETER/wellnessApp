@@ -53,6 +53,28 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
             return;
         }
 
+                   // Ensure fields are not empty
+            if (!email.trim()) {
+                Alert.alert("Validation Error", "Email is required.");
+                return;
+            }
+            if (!password.trim()) {
+                Alert.alert("Validation Error", "Password is required.");
+                return;
+            }
+            if (!lastName.trim()) {
+                Alert.alert("Validation Error", "Last name is required.");
+                return;
+            }
+                if (!firstName.trim()) {
+                    Alert.alert("Validation Error", "First name is required.");
+                    return;
+                }
+                if (!confirmPassword.trim()) {
+                    Alert.alert("Validation Error", "Password is required.");
+                    return;
+                }
+
         setIsLoading(true);
 
         try {

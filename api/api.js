@@ -26,6 +26,11 @@ export const registerUser = async (email, password, firstName, lastName) => {
   
 
   
+export const loginUser = async (email, password ) => {
+    const response = await apiClient.post('/api/auth/login', { email, password });
+    return response.data; // Return the server response directly
+  };
+  
   
 
 
