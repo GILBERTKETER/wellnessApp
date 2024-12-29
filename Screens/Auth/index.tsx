@@ -25,6 +25,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [secureTextEntry, setSecureTextEntry] = useState(true);
+     const [isLoading, setIsLoading] = useState(false);
 
 
     const openSignupPage = () => {
@@ -33,6 +34,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     const handleLogin = () => {
         // Implement login logic
+        setIsLoading(true);
+
+
+
+
+
         navigation.navigate('MainApp');
     };
 

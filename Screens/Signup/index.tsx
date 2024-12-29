@@ -6,7 +6,11 @@ import {
     TouchableOpacity,
     Linking,
     Alert,
-    ActivityIndicator
+    ActivityIndicator,
+    SafeAreaView,
+    StatusBar,
+    Platform,
+    Modal,
 } from 'react-native';
 import {
     Text,
@@ -20,6 +24,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootStackParamList } from '../../App';
 // Import the registerUser function from api.js
 import { registerUser } from '../../api/api';
+
 import { checkInternetConnection, checkAPIReachability } from '../../utils/networkUtils';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -29,8 +34,8 @@ const { width, height } = Dimensions.get('window');
 type SignupScreenProps = StackScreenProps<RootStackParamList, 'Signup'>;
 
 const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
-    const [lastName, setFName] = useState('');
-    const [firstName, setLName] = useState('');
+    const [lastName, setLName] = useState('');
+    const [firstName, setFName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -120,132 +125,152 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
 
 
     return (
-        <View style={styles.container}>
-            <Surface style={styles.card}>
-                <Text style={styles.title}>Wellness App</Text>
-                <Text style={styles.subtitle}>Sign up to get started</Text>
+        //  wraps the content with respect to status bar area
+        //For android it is done dynamiccally while ios it automatic
+        <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }]}>
+            <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
+            <View style={styles.container}>
+                <Surface style={styles.card}>
+                    <Text style={styles.title}>Wellness App</Text>
+                    <Text style={styles.subtitle}>Sign up to get started</Text>
 
-                {/* Name Input */}
-                <View style={styles.inputContainer}>
-                    <Icon name="account" size={20} color="#888" />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="First Name"
-                        value={firstName}
-                        onChangeText={setFName}
-                    />
-                </View>
-
-
-                <View style={styles.inputContainer}>
-                    <Icon name="account" size={20} color="#888" />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="last Name"
-                        value={lastName}
-                        onChangeText={setLName}
-                    />
-                </View>
-
-                {/* Email Input */}
-                <View style={styles.inputContainer}>
-                    <Icon name="email" size={20} color="#888" />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-                </View>
-
-                {/* Password Input */}
-                <View style={styles.inputContainer}>
-                    <Icon name="lock" size={20} color="#888" />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        secureTextEntry={secureTextEntry}
-                        value={password}
-                        onChangeText={setPassword}
-                    />
-                    <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
-                        <Icon
-                            name={secureTextEntry ? 'eye-off-outline' : 'eye-outline'}
-                            size={20}
-                            color="#6200EE"
+                    {/* Name Input */}
+                    <View style={styles.inputContainer}>
+                        <Icon name="account" size={20} color="#888" />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="First Name"
+                            value={firstName}
+                            onChangeText={setFName}
                         />
-                    </TouchableOpacity>
-                </View>
+                    </View>
 
-                {/* Confirm Password Input */}
-                <View style={styles.inputContainer}>
-                    <Icon name="lock" size={20} color="#888" />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Confirm Password"
-                        secureTextEntry={secureTextEntry}
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                    />
-                    <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
-                        <Icon
-                            name={secureTextEntry ? 'eye-off-outline' : 'eye-outline'}
-                            size={20}
-                            color="#6200EE"
+
+                    <View style={styles.inputContainer}>
+                        <Icon name="account" size={20} color="#888" />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="last Name"
+                            value={lastName}
+                            onChangeText={setLName}
                         />
-                    </TouchableOpacity>
-                </View>
+                    </View>
+
+                    {/* Email Input */}
+                    <View style={styles.inputContainer}>
+                        <Icon name="email" size={20} color="#888" />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            keyboardType="email-address"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
+                    </View>
+
+                    {/* Password Input */}
+                    <View style={styles.inputContainer}>
+                        <Icon name="lock" size={20} color="#888" />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            secureTextEntry={secureTextEntry}
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
+                            <Icon
+                                name={secureTextEntry ? 'eye-off-outline' : 'eye-outline'}
+                                size={20}
+                                color="#6200EE"
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Confirm Password Input */}
+                    <View style={styles.inputContainer}>
+                        <Icon name="lock" size={20} color="#888" />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Confirm Password"
+                            secureTextEntry={secureTextEntry}
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                        />
+                        <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
+                            <Icon
+                                name={secureTextEntry ? 'eye-off-outline' : 'eye-outline'}
+                                size={20}
+                                color="#6200EE"
+                            />
+                        </TouchableOpacity>
+                    </View>
 
 
-                {/* Terms and Conditions */}
-                <View style={styles.termsContainer}>
-                    <Checkbox status={isChecked ? 'checked' : 'unchecked'}
-                        onPress={() => setIsChecked(!isChecked)} />
-                    <Text style={styles.termsText}>
-                        I accept the{' '}
-                        <Text style={styles.link} onPress={openTermsAndConditions}>
-                            Terms and Conditions
+                    {/* Terms and Conditions */}
+                    <View style={styles.termsContainer}>
+                        <Checkbox status={isChecked ? 'checked' : 'unchecked'}
+                            onPress={() => setIsChecked(!isChecked)} />
+                        <Text style={styles.termsText}>
+                            I accept the{' '}
+                            <Text style={styles.link} onPress={openTermsAndConditions}>
+                                Terms and Conditions
+                            </Text>
                         </Text>
-                    </Text>
-                </View>
+                    </View>
 
 
 
-                {/* Sign Up Button */}
-                {isLoading ? (
-                    <ActivityIndicator size="large" color="#0000ff" />
-                ) : (
+                    {/* Sign Up Button */}
                     <TouchableOpacity style={styles.button} onPress={handleSignup}>
                         <Text style={styles.buttonText}>Sign Up</Text>
                     </TouchableOpacity>
-                )}
 
-                {/* Divider */}
-                <Text style={styles.divider}>Or sign up with</Text>
+                    {/* Divider */}
+                    <Text style={styles.divider}>Or sign up with</Text>
 
-                {/* Social Login Buttons */}
-                <View style={styles.socialContainer}>
-                    <TouchableOpacity style={styles.socialButton}>
-                        <Icon name="apple" size={24} color="#000" />
-                        <Text style={styles.socialText}>Apple</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialButton}>
-                        <Icon name="google" size={24} color="#EA4335" />
-                        <Text style={styles.socialText}>Google</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialButton}>
-                        <Icon name="facebook" size={24} color="#3b5998" />
-                        <Text style={styles.socialText}>Facebook</Text>
-                    </TouchableOpacity>
-                </View>
+                    {/* Social Login Buttons */}
+                    <View style={styles.socialContainer}>
+                        <TouchableOpacity style={styles.socialButton}>
+                            <Icon name="apple" size={24} color="#000" />
+                            <Text style={styles.socialText}>Apple</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.socialButton}>
+                            <Icon name="google" size={24} color="#EA4335" />
+                            <Text style={styles.socialText}>Google</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.socialButton}>
+                            <Icon name="facebook" size={24} color="#3b5998" />
+                            <Text style={styles.socialText}>Facebook</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                {/* Login Link */}
-                <Text style={styles.signupText}>
-                    Already have an account? <Text style={styles.signupLink} onPress={openLoginPage}>Log In</Text>
-                </Text>
-            </Surface>
-        </View>
+                    {/* Login Link */}
+                    <Text style={styles.signupText}>
+                        Already have an account? <Text style={styles.signupLink} onPress={openLoginPage}>Log In</Text>
+                    </Text>
+
+
+
+
+
+                </Surface>
+                {/* Modal Loader */}
+                <Modal
+                    transparent={true}
+                    animationType="fade"
+                    visible={isLoading}
+                    onRequestClose={() => { }}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <ActivityIndicator size="large" color="#0000ff" />
+                            <Text style={styles.modalText}>Please wait...</Text>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+        </SafeAreaView>
     );
 };
 
@@ -359,6 +384,26 @@ const styles = StyleSheet.create({
     signupLink: {
         color: '#1E90FF',
         fontWeight: 'bold',
+    },
+    // modal loader
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+        width: '80%',
+    
+    },
+    modalText: {
+        marginTop: 10,
+        fontSize: 16,
+        color: '#333',
     },
 });
 

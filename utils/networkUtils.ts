@@ -10,7 +10,7 @@ export const checkInternetConnection = async (): Promise<boolean> => {
         const state = await NetInfo.fetch();
         return state.isConnected || false;
     } catch (error) {
-        console.error('Error checking internet connection:', error);
+        // console.error('Error checking internet connection:', error);
         return false;
     }
 };
