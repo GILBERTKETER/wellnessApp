@@ -19,7 +19,8 @@ import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootStackParamList } from '../../App';
 // Import the registerUser function from api.js
-import {  registerUser } from '../../api/api';
+import { registerUser } from '../../api/api';
+import { checkInternetConnection, checkAPIReachability } from '../../utils/networkUtils';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -38,62 +39,69 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
 
     const handleSignup = async () => {
         if (!isChecked) {
-          Alert.alert("Terms and Conditions", "You must accept the Terms and Conditions to proceed.");
-          return;
-        }
-      
-        if (password !== confirmPassword) {
-          Alert.alert("Password Mismatch", "Passwords do not match.");
-          return;
-        }
-      
-        setIsLoading(true); // Show loader
-      
-        try {
-          const response = await registerUser(email, password, firstName, lastName);
-      
-          // Check if response is valid or timeout occurred
-          if (!response || response.status === 0 || typeof response !== "object") {
-            Alert.alert("Error", "No response from server. Please try again later.");
+            Alert.alert("Terms and Conditions", "You must accept the Terms and Conditions to proceed.");
             return;
-          }
-      
-          const { status, message, data } = response;
-      
-          if (status === "success" && data) {
-            const { userId, accessToken, refreshToken } = data;
-      
-            console.log("User registered:", data);
-      
-            Alert.alert("Success", message);
-            navigation.navigate("MainApp");
-          } else {
-            Alert.alert("Error", message || "An unexpected error occurred.");
-          }
-        } catch (error) {
-          let errorMessage = "An unexpected error occurred.";
-      
-          if (error instanceof Error) {
-            errorMessage = error.message;
-          }
-      
-          Alert.alert("Error", errorMessage);
-        } finally {
-          setIsLoading(false);
         }
-      };
-      
-      
-      
-      
-      
 
-      
-    
-    
-    
-    
-    
+        if (password !== confirmPassword) {
+            Alert.alert("Password Mismatch", "Passwords do not match.");
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            // Check internet connection
+            const isConnected = await checkInternetConnection();
+            if (!isConnected) {
+                Alert.alert("No Internet", "Please check your internet connection and try again.");
+                setIsLoading(false);
+                return;
+            }
+
+            // Check API reachability
+            const apiBaseUrl = "http://192.168.42.215:3000"; // Replace with your actual API base URL
+            const isApiReachable = await checkAPIReachability(apiBaseUrl);
+            if (!isApiReachable) {
+                Alert.alert("Server Unreachable", "The server is currently unreachable. Please try again later.");
+                setIsLoading(false);
+                return;
+            }
+
+            const response = await registerUser(email, password, firstName, lastName);
+            if (response?.status === "success" && response.data) {
+                const { userId, accessToken, refreshToken } = response.data;
+
+                // Save tokens to AsyncStorage
+                // await AsyncStorage.multiSet([
+                //     ["@accessToken", accessToken],
+                //     ["@refreshToken", refreshToken],
+                //     ["@userId", userId]
+                // ]);
+
+                Alert.alert("Success", response.message);
+                navigation.navigate("MainApp");
+            } else {
+                Alert.alert("Error", response?.message || "An unexpected error occurred.");
+            }
+        } catch (error) {
+            Alert.alert("Error", error instanceof Error ? error.message : "An unexpected error occurred.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     const openLoginPage = () => {
@@ -204,14 +212,14 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
 
 
 
-               {/* Sign Up Button */}
-{isLoading ? (
-  <ActivityIndicator size="large" color="#0000ff" />
-) : (
-  <TouchableOpacity style={styles.button} onPress={handleSignup}>
-    <Text style={styles.buttonText}>Sign Up</Text>
-  </TouchableOpacity>
-)}
+                {/* Sign Up Button */}
+                {isLoading ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                ) : (
+                    <TouchableOpacity style={styles.button} onPress={handleSignup}>
+                        <Text style={styles.buttonText}>Sign Up</Text>
+                    </TouchableOpacity>
+                )}
 
                 {/* Divider */}
                 <Text style={styles.divider}>Or sign up with</Text>
@@ -288,7 +296,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         height: 40,
         backgroundColor: '#fff',
-        
+
     },
     termsContainer: {
         flexDirection: 'row',
